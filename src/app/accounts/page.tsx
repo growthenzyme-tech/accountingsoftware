@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePermissions } from "@/lib/use-permissions";
+import PageLoader from "@/components/common/PageLoader";
 
 type AccountType =
   | "asset"
@@ -317,13 +318,8 @@ async function handleDeleteAccount(account: Account) {
   }
 }
 
-
 if (authLoading || permissionsLoading) {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <RefreshCw className="h-6 w-6 animate-spin" />
-    </div>
-  );
+  return <PageLoader />;
 }
 
 if (!canView) {
@@ -551,13 +547,13 @@ onClick={() => {
 </thead>
 
                 <tbody className="divide-y divide-border">
-                  {loading ? (
-                    <tr>
-                      <td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">
-                        Loading accounts...
-                      </td>
-                    </tr>
-                  ) : filteredAccounts.length === 0 ? (
+               {loading ? (
+  <tr>
+    <td colSpan={5} className="p-0">
+      <PageLoader />
+    </td>
+  </tr>
+) : filteredAccounts.length === 0 ? (
                     <tr>
                      <td
   colSpan={5}

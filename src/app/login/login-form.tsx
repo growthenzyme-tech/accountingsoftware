@@ -96,20 +96,20 @@ export default function LoginForm() {
   // };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background p-5 text-foreground">
+   <main className="flex min-h-screen items-center justify-center bg-background p-4 sm:p-6 text-foreground">
       <div className="w-full max-w-md">
-        <div className="mx-auto mb-10 text-center">
+        <div className="mx-auto mb-4 text-center">
           <Link href="/dashboard" className="inline-flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Wallet className="h-7 w-7" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+             <Wallet className="h-6 w-6" />
             </div>
           </Link>
         </div>
 
-        <div className="space-y-6 rounded-xl border border-border bg-card p-6 sm:p-8 shadow-sm">
+        <div className="space-y-5 rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
           <div className="text-center space-y-2">
-            <h2 className="font-serif text-3xl font-medium tracking-tight text-foreground">Welcome Back</h2>
-            <p className="text-base text-muted-foreground">Sign in to manage your business finances.</p>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Welcome</h2>
+           <p className="text-sm text-muted-foreground">Sign in to manage your business finances.</p>
           </div>
 
           {authError && (
@@ -130,7 +130,7 @@ export default function LoginForm() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 Email
@@ -145,7 +145,7 @@ export default function LoginForm() {
                   value={email}
                   onChange={(e) => handleChange("email", e.target.value)}
                   onBlur={(e) => handleBlur("email", e.target.value)}
-                  className="pl-12 pr-3 w-full h-12 rounded-lg border border-border bg-background text-base text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none disabled:bg-muted/50 disabled:cursor-not-allowed"
+                  className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:bg-muted/50"
                   placeholder="you@company.com"
                   aria-invalid={touched.email && !!errors.email}
                   aria-describedby={touched.email && errors.email ? "email-error" : undefined}
@@ -168,7 +168,7 @@ export default function LoginForm() {
 </div>
 
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate_y-1/2 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
@@ -177,7 +177,7 @@ export default function LoginForm() {
                   value={password}
                   onChange={(e) => handleChange("password", e.target.value)}
                   onBlur={(e) => handleBlur("password", e.target.value)}
-                  className="pl-12 pr-12 w-full h-12 rounded-lg border border-border bg-background text-base text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none disabled:bg-muted/50 disabled:cursor-not-allowed"
+                  className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:bg-muted/50"
                   placeholder="••••••••"
                   aria-invalid={touched.password && !!errors.password}
                   aria-describedby={touched.password && errors.password ? "password-error" : undefined}
@@ -186,7 +186,7 @@ export default function LoginForm() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate_y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   aria-pressed={showPassword}
                 >
@@ -215,7 +215,7 @@ export default function LoginForm() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-primary text-primary-foreground font-medium text-sm rounded-lg transition-all duration-150 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-10 w-full rounded-lg bg-primary text-sm font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -236,12 +236,12 @@ export default function LoginForm() {
           </p> */}
         </div>
 
-        <p className="mt-8 text-center text-xs text-muted-foreground/60">
+        {/* <p className="mt-6 text-center text-xs text-muted-foreground/60">
           By signing in, you agree to our{" "}
           <Link href="/terms" className="underline underline-offset-2 hover:text-foreground transition-colors">Terms of Service</Link>{" "}
           and{" "}
           <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground transition-colors">Privacy Policy</Link>
-        </p>
+        </p> */}
       </div>
     </main>
   );

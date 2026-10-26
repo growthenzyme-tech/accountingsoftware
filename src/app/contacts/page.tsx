@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import Sidebar from "@/components/layout/Sidebar";
+import PageLoader from "@/components/common/PageLoader";
 import Header from "@/components/layout/Header";
 import { useRequireAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
@@ -234,11 +235,7 @@ async function handleDelete(contact: Contact) {
   ).length;
 
  if (authLoading || permissionsLoading) {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Loader2 className="h-6 w-6 animate-spin" />
-    </div>
-  );
+  return <PageLoader />;
 }
 
   if (!canView) {
@@ -499,11 +496,8 @@ className="h-9 text-sm"
             </div>
 
             {loading ? (
-              <div className="flex items-center justify-center gap-2 p-12 text-sm text-muted-foreground">
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Loading contacts...
-              </div>
-            ) : filteredContacts.length === 0 ? (
+  <PageLoader />
+) : filteredContacts.length === 0 ? (
               <div className="flex flex-col items-center px-4 py-14 text-center">
                 <div className="mb-4 rounded-full bg-muted p-4">
                   <Users className="h-7 w-7 text-muted-foreground" />

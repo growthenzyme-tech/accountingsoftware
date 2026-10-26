@@ -125,13 +125,13 @@ const response = await fetch(
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="space-y-7 p-5 sm:p-8">
-          <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
+          <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">
+              <h1 className="text-base font-semibold tracking-tight sm:text-lg">
                 Financial Reports
               </h1>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                 Review your business performance and profitability.
               </p>
             </div>
@@ -139,12 +139,11 @@ const response = await fetch(
             
 
 
-<div className="flex flex-wrap items-end justify-start gap-3 sm:justify-end">
-  {/* Reporting Period */}
-  <div className="space-y-1">
+<div className="grid w-full grid-cols-1 gap-2 xl:w-[220px] xl:shrink-0">
+  <div className="space-y-0.5">
     <label
       htmlFor="report-period"
-      className="text-sm text-muted-foreground"
+      className="text-[12px] text-muted-foreground leading-tight"
     >
       Reporting period
     </label>
@@ -156,7 +155,7 @@ const response = await fetch(
         onChange={(event) =>
           setPeriod(event.target.value as ReportingPeriod)
         }
-        className="h-10 w-full appearance-none rounded-lg border border-border bg-background py-2 pl-3 pr-9 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+        className="h-8 w-full min-w-[150px] appearance-none rounded-lg border border-border bg-background py-1 pl-2.5 pr-7 text-[12px] text-foreground outline-none transition-shadow focus:ring-2 focus:ring-ring"
       >
         <option value="this-month">This Month</option>
         <option value="last-month">Last Month</option>
@@ -166,73 +165,73 @@ const response = await fetch(
 
       <ChevronDown
         aria-hidden="true"
-        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+        className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
       />
     </div>
   </div>
 
-  {/* Custom Date Range */}
   {period === "custom" && (
-    <>
-      <div className="space-y-1">
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-1">
+      <div className="space-y-0.5">
         <label
           htmlFor="start-date"
-          className="text-sm text-muted-foreground"
+          className="text-[12px] text-muted-foreground leading-tight"
         >
           Start date
         </label>
+
         <input
           id="start-date"
           type="date"
           value={startDate}
-          aria-invalid={invalidDateRange}
           max={endDate || undefined}
           onChange={(event) => setStartDate(event.target.value)}
-          className="h-10 rounded-lg border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+          aria-invalid={invalidDateRange}
+          className="h-8 w-full min-w-0 rounded-lg border border-border bg-background px-2 text-[12px] outline-none transition-shadow focus:ring-2 focus:ring-ring"
         />
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         <label
           htmlFor="end-date"
-          className="text-sm text-muted-foreground"
+          className="text-[12px] text-muted-foreground leading-tight"
         >
           End date
         </label>
+
         <input
           id="end-date"
           type="date"
           value={endDate}
-          aria-invalid={invalidDateRange}
           min={startDate || undefined}
           onChange={(event) => setEndDate(event.target.value)}
-          className="h-10 rounded-lg border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+          aria-invalid={invalidDateRange}
+          className="h-8 w-full min-w-0 rounded-lg border border-border bg-background px-2 text-[12px] outline-none transition-shadow focus:ring-2 focus:ring-ring"
         />
-        
-{invalidDateRange && (
-  <p className="text-sm text-red-600" role="alert">
-    End date must be on or after the start date.
-  </p>
-)}
 
+        {invalidDateRange && (
+          <p
+            className="text-[12px] text-destructive leading-tight"
+            role="alert"
+          >
+            End date must be on or after the start date.
+          </p>
+        )}
       </div>
-    </>
+    </div>
   )}
 
-  {/* Selected Date Range */}
   <p
-    className="w-full text-right text-xs text-muted-foreground"
+    className="text-left text-[11px] text-muted-foreground leading-tight xl:text-right"
     aria-live="polite"
   >
- 
-{invalidDateRange
-  ? "End date must be on or after the start date."
-  : !dateRange
-    ? period === "custom"
-      ? "Select both dates to continue."
-      : "Select a valid reporting period."
-    : `Showing ${dateRange.startDate} to ${dateRange.endDate}`}
-
+    {invalidDateRange
+      ? "End date must be on or after the start date."
+      : !dateRange
+        ? period === "custom"
+          ? "Select both dates to continue."
+          : "Select a valid reporting period."
+        : `Showing ${dateRange.startDate} to ${dateRange.endDate}`}
   </p>
 </div>
 
@@ -240,11 +239,11 @@ const response = await fetch(
 
           </section>
 
-          <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+         <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <SummaryCard
               title="Total Revenue"
               amount={report?.revenue ?? 0}
-              icon={<TrendingUp className="h-5 w-5 text-emerald-600" />}
+              icon={<TrendingUp className="h-4 w-4 text-emerald-600" />}
               description="Income recorded in the selected period"
               loading={loading}
             />
@@ -252,7 +251,7 @@ const response = await fetch(
             <SummaryCard
               title="Total Expenses"
               amount={report?.expenses ?? 0}
-              icon={<TrendingDown className="h-5 w-5 text-rose-600" />}
+              icon={<TrendingDown className="h-4 w-4 text-rose-600" />}
               description="Expenses recorded in the selected period"
               loading={loading}
             />
@@ -260,7 +259,7 @@ const response = await fetch(
             <SummaryCard
               title="Net Profit"
               amount={report?.netProfit ?? 0}
-              icon={<Wallet className="h-5 w-5 text-blue-600" />}
+              icon={<Wallet className="h-4 w-4 text-blue-600" />}
               description="Revenue minus expenses"
               loading={loading}
             />
@@ -269,7 +268,7 @@ const response = await fetch(
           {error && (
             <div
               role="alert"
-              className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm"
+              className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm"
             >
               <p className="font-medium">Unable to load the report</p>
               <p className="mt-1 text-muted-foreground">{error}</p>
@@ -284,14 +283,14 @@ const response = await fetch(
           )}
 
           <section className="rounded-xl border border-border bg-card">
-            <div className="border-b border-border p-5">
+            <div className="border-b border-border p-3 sm:p-4">
               <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-muted-foreground" />
-                <h2 className="text-lg font-semibold">
+                <FileText className="h-4 w-4 text-muted-foreground" />
+               <h2 className="text-sm font-semibold">
                   Profit &amp; Loss Statement
                 </h2>
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                Income and expenses for{" "}
 {dateRange
   ? `${dateRange.startDate} to ${dateRange.endDate}`
@@ -308,14 +307,14 @@ const response = await fetch(
                 The statement will appear when the report data loads.
               </p>
             ) : (
-              <div className="p-5 sm:p-6">
+              <div className="p-4 sm:p-5">
                 <ReportSection
                   title="Revenue"
                   lines={report?.incomeAccounts ?? []}
                   total={report?.revenue ?? 0}
                 />
 
-                <div className="my-6 border-t border-border" />
+                <div className="my-5 border-t border-border" />
 
                 <ReportSection
                   title="Expenses"
@@ -323,10 +322,10 @@ const response = await fetch(
                   total={report?.expenses ?? 0}
                 />
 
-                <div className="mt-6 flex items-center justify-between rounded-lg bg-muted/50 p-4">
-                  <span className="font-semibold">Net Profit</span>
+                <div className="mt-5 flex items-center justify-between rounded-lg bg-muted/50 p-3 sm:p-4">
+                  <span className="text-sm font-semibold">Net Profit</span>
                   <span
-                    className={`text-lg font-bold ${
+                    className={`text-base font-semibold tabular-nums sm:text-lg ${
                       (report?.netProfit ?? 0) < 0
                         ? "text-rose-600"
                         : "text-emerald-600"
@@ -362,17 +361,17 @@ function SummaryCard({
   loading: boolean;
 }) {
   return (
-    <article className="rounded-xl border border-border bg-card p-5 shadow-sm">
+    <article className="flex min-h-[125px] flex-col rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">{title}</p>
+        <p className="text-xs text-muted-foreground">{title}</p>
         {icon}
       </div>
 
-      <p className="mt-4 text-2xl font-bold tracking-tight">
+     <p className="mt-3 text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
         {loading ? "Loading..." : money(amount)}
       </p>
 
-      <p className="mt-2 text-xs text-muted-foreground">{description}</p>
+      <p className="mt-1 text-[11px] text-muted-foreground">{description}</p>
     </article>
   );
 }

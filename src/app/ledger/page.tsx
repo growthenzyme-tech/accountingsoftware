@@ -303,25 +303,27 @@ return (
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="space-y-6 p-5 sm:p-8">
-          <section className="flex flex-wrap items-center justify-between gap-3">
+        <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
+          <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <BookOpen className="h-8 w-8 text-primary" />
+              <BookOpen className="h-5 w-5 shrink-0 text-primary" />
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">
+                {/* <h1 className="text-base font-semibold tracking-tight sm:text-lg">
                   General Ledger
-                </h1>
-                <p className="mt-1 text-sm text-muted-foreground">
+                </h1> */}
+                <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                   Create and review double-entry journal entries.
                 </p>
               </div>
             </div>
 
-            <Button
-              variant="outline"
-              onClick={() => void loadData()}
-              disabled={loading}
-            >
+           <Button
+  variant="outline"
+  size="sm"
+  className="h-8 w-full text-xs sm:w-auto"
+  onClick={() => void loadData()}
+  disabled={loading}
+>
               <RefreshCw className="mr-2 h-4 w-4" />
               Refresh
             </Button>
@@ -345,13 +347,13 @@ return (
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <section className="space-y-4 rounded-xl border border-border bg-card p-5 sm:p-6">
-              <h2 className="text-lg font-semibold">Journal Entry Details</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
+              <h2 className="text-sm font-semibold">Journal Entry Details</h2>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="entry-date">Entry date</Label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-1.5">
+  <Label htmlFor="entry-date">Entry date</Label>
                   <div className="relative">
                     <CalendarDays className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -359,16 +361,17 @@ return (
                       type="date"
                       value={date}
                       onChange={(event) => setDate(event.target.value)}
-                      className="pl-9"
+                      className="h-9 pl-9 text-sm"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="entry-description">Description</Label>
                   <Input
                     id="entry-description"
+                    className="h-9 text-sm"
                     value={description}
                     onChange={(event) =>
                       setDescription(event.target.value)
@@ -381,10 +384,16 @@ return (
               </div>
             </section>
 
-            <section className="space-y-4 rounded-xl border border-border bg-card p-5 sm:p-6">
+            <section className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-lg font-semibold">Journal Entry Lines</h2>
-                <Button type="button" variant="outline" onClick={addLine}>
+               <h2 className="text-sm font-semibold">Journal Entry Lines</h2>
+               <Button
+  type="button"
+  variant="outline"
+  size="sm"
+  className="h-8 text-xs"
+  onClick={addLine}
+>
                   <Plus className="mr-2 h-4 w-4" />
                   Add Line
                 </Button>
@@ -401,9 +410,9 @@ return (
                 {lines.map((line, index) => (
                   <div
                     key={line.id}
-                    className="grid gap-3 rounded-lg border border-border p-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_1fr_1fr_auto]"
+                  className="grid gap-3 rounded-lg border border-border bg-background p-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_1fr_1fr_auto]"
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor={`account-${line.id}`}>
                         Account {index + 1}
                       </Label>
@@ -414,8 +423,7 @@ return (
                           updateLine(line.id, "accountId", event.target.value)
                         }
                         required
-                        className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                      >
+                        className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
                         <option value="">Select account</option>
                         {accounts.map((account) => (
                           <option key={account.id} value={account.id}>
@@ -425,9 +433,10 @@ return (
                       </select>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor={`debit-${line.id}`}>Debit (₹)</Label>
                       <Input
+                      className="h-9 text-sm"
                         id={`debit-${line.id}`}
                         type="number"
                         min="0"
@@ -440,9 +449,10 @@ return (
                       />
                     </div>
 
-                    <div className="space-y-2">
+                   <div className="space-y-1.5">
                       <Label htmlFor={`credit-${line.id}`}>Credit (₹)</Label>
                       <Input
+                        className="h-9 text-sm"
                         id={`credit-${line.id}`}
                         type="number"
                         min="0"
@@ -471,16 +481,16 @@ return (
                 ))}
               </div>
 
-              <div className="grid gap-4 rounded-lg bg-muted/40 p-4 sm:grid-cols-2">
+              <div className="grid gap-3 rounded-lg bg-muted/40 p-3 sm:grid-cols-2 sm:p-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Debits</p>
-                  <p className="mt-1 text-xl font-semibold">
+                 <p className="text-xs text-muted-foreground">Total Debits</p>
+                 <p className="mt-1 text-lg font-semibold tracking-tight tabular-nums sm:text-xl">
                     ₹{(totalDebits / 100).toFixed(2)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Credits</p>
-                  <p className="mt-1 text-xl font-semibold">
+                  <p className="text-xs text-muted-foreground">Total Credits</p>
+                 <p className="mt-1 text-lg font-semibold tracking-tight tabular-nums sm:text-xl">
                     ₹{(totalCredits / 100).toFixed(2)}
                   </p>
                 </div>
@@ -500,6 +510,8 @@ return (
             
 <div className="flex justify-end">
   <Button
+    size="sm"
+  className="h-9 w-full text-xs sm:w-auto"
     type="submit"
     disabled={
       saving ||
@@ -517,22 +529,22 @@ return (
           </form>
 
           <section className="overflow-hidden rounded-xl border border-border bg-card">
-            <div className="border-b border-border p-5">
-              <h2 className="text-lg font-semibold">Recent Journal Entries</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+            <div className="border-b border-border p-3 sm:p-4">
+              <h2 className="text-sm font-semibold">Recent Journal Entries</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                 Saved entries from your accounting records.
               </p>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50 text-left">
+              <table className="w-full min-w-[650px] text-sm">
+                <thead className="border-b bg-muted/40 text-left">
                   <tr>
-                    <th className="px-4 py-3 font-medium">Date</th>
-                    <th className="px-4 py-3 font-medium">Description</th>
-                    <th className="px-4 py-3 font-medium">Debits</th>
-                    <th className="px-4 py-3 font-medium">Credits</th>
-                    <th className="px-4 py-3 font-medium">Status</th>
+                    <th className="px-4 py-3 text-xs font-semibold text-muted-foreground">Date</th>
+                    <th className="px-4 py-3 text-xs font-semibold text-muted-foreground">Description</th>
+                    <th className="px-4 py-3 text-xs font-semibold text-muted-foreground">Debits</th>
+                    <th className="px-4 py-3 text-xs font-semibold text-muted-foreground">Credits</th>
+                    <th className="px-4 py-3 text-xs font-semibold text-muted-foreground">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
