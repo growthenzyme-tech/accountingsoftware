@@ -345,15 +345,15 @@ if (!canView) {
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="space-y-6 p-5 sm:p-8">
-          <section className="flex flex-wrap items-center justify-between gap-4">
+        <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
+          <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <Wallet className="h-8 w-8 text-primary" />
+              <Wallet className="h-5 w-5 text-primary" />
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">
+                <h1 className="text-base font-semibold tracking-tight sm:text-lg">
                   Chart of Accounts
                 </h1>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                   Manage your general ledger accounts.
                 </p>
               </div>
@@ -399,16 +399,16 @@ if (!canView) {
           )}
 
           {showForm && (editingId ? canEdit : canCreate) && (
-            <section className="rounded-xl border border-border bg-card p-5">
-              <h2 className="mb-4 text-lg font-semibold">
+            <section className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <h2 className="border-b px-4 py-3.5 text-sm font-semibold sm:px-5">
   {editingId ? "Edit Account" : "Add Account"}
 </h2>
 
               <form
                 onSubmit={editingId ? handleSaveAccount : handleAddAccount}
-                className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+               className="grid gap-3 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-4"
               >
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="account-code">Account code</Label>
                   <Input
                     id="account-code"
@@ -480,25 +480,25 @@ onClick={() => {
             </section>
           )}
 
-          <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-5">
             {accountTypes.map((type) => (
               <button
                 key={type}
                 type="button"
                 onClick={() => setFilter(filter === type ? "all" : type)}
-                className={`rounded-xl border p-4 text-left transition-colors ${
-                  filter === type
-                    ? "border-primary bg-primary/5"
-                    : "border-border bg-card hover:bg-accent"
-                }`}
+               className={`flex min-h-[110px] flex-col rounded-xl border p-4 text-left shadow-sm transition-colors ${
+  filter === type
+    ? "border-primary bg-primary/5"
+    : "border-border bg-card hover:bg-accent"
+}`}
               >
-                <p className="text-sm capitalize text-muted-foreground">
+                <p className="text-xs capitalize text-muted-foreground">
                   {type}
                 </p>
-                <p className="mt-2 text-2xl font-semibold">
+                <p className="mt-2 text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
                   {accounts.filter((account) => account.type === type).length}
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground">
+                <p className="mt-1.5 text-[11px] text-muted-foreground">
                   Accounts
                 </p>
               </button>
@@ -506,7 +506,7 @@ onClick={() => {
           </section>
 
           <section className="overflow-hidden rounded-xl border border-border bg-card">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
+            <div className="flex flex-col gap-3 border-b border-border p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
               <div>
                 <h2 className="font-semibold">All Accounts</h2>
                 <p className="text-sm text-muted-foreground">
@@ -522,7 +522,7 @@ onClick={() => {
                     placeholder="Search code or name"
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    className="pl-9"
+                    className="h-9 w-full pl-9 text-sm"
                   />
                 </div>
                 <Button
@@ -538,10 +538,10 @@ onClick={() => {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+             <table className="w-full min-w-[700px] text-sm">
                 
-<thead className="bg-muted/50 text-left">
-  <tr>
+<thead className="border-b bg-muted/40">
+  <tr className="text-left text-xs font-semibold text-muted-foreground">
     <th className="px-4 py-3 font-medium">Code</th>
     <th className="px-4 py-3 font-medium">Account name</th>
     <th className="px-4 py-3 font-medium">Type</th>

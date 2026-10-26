@@ -13,6 +13,7 @@ import {
   X,
   Send,
   Wallet,
+   Eye,
   ChevronRight,
 } from "lucide-react";
 import { generateInvoicePDF } from "@/lib/generate-invoice-pdf";
@@ -396,23 +397,24 @@ const detailProps = {
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="mx-auto w-full max-w-[1500px] space-y-5 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto w-full max-w-none space-y-4 p-3 sm:p-4 lg:p-5">
           {/* Title */}
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
-              <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+              {/* <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
                 Invoices
-              </h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">
+              </h1> */}
+              <p className="mt-1 text-sm text-muted-foreground">
                 Create and manage customer invoices.
               </p>
             </div>
 
-            <Button
-              className="shrink-0"
-              onClick={() => router.push("/invoices/new")}
-            >
-              <Plus className="h-4 w-4 sm:mr-2" />
+           <Button
+  size="sm"
+  className="h-9 w-full shrink-0 sm:w-auto"
+  onClick={() => router.push("/invoices/new")}
+>
+              <Plus className="h-3.5 w-3.5 sm:mr-1.5" />
               <span className="hidden sm:inline">Create Invoice</span>
               <span className="sr-only sm:hidden">Create Invoice</span>
             </Button>
@@ -436,218 +438,266 @@ const detailProps = {
           )}
 
           {/* Overview strip */}
-          <section className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-            <div className="grid grid-cols-2 lg:grid-cols-4">
-              <Metric
-                label="Total invoiced"
-                value={formatINR(totalInvoiced)}
-                className="border-b border-r lg:border-b-0"
-              />
-              <Metric
-                label="Collected"
-                value={formatINR(totalCollected)}
-                className="border-b lg:border-b-0 lg:border-r"
-              />
-              <Metric
-                label="Outstanding"
-                value={formatINR(totalOutstanding)}
-                className="border-r lg:border-b-0"
-              />
-              <Metric
-                label="Overdue"
-                value={`${overdueCount} invoice${overdueCount !== 1 ? "s" : ""}`}
-              />
-            </div>
-            <div className="flex items-center gap-3 border-t bg-muted/40 px-5 py-3">
-              <span className="shrink-0 text-xs text-muted-foreground">
-                Collection rate
-              </span>
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
-                <div
-                  className="h-full rounded-full bg-foreground transition-all"
-                  style={{ width: `${collectionRate}%` }}
-                />
-              </div>
-              <span className="shrink-0 text-xs font-semibold tabular-nums">
-                {collectionRate}%
-              </span>
-            </div>
-          </section>
+          
+{/* Invoice Table */}
+<section className="overflow-hidden rounded-xl border bg-card shadow-sm">
 
-          {/* Split view */}
-          <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
-            {/* List */}
-            <section className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-              <div className="space-y-3 border-b p-4">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Search invoice or customer..."
-                    className="pl-9"
-                    aria-label="Search invoices"
-                  />
-                </div>
+  {/* Search and Filters */}
+  <div className="flex flex-col gap-3 border-b p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
 
-                <div
-                  className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5"
-                  role="tablist"
-                  aria-label="Filter invoices by status"
-                >
-                  {STATUS_TABS.map((tab) => {
-                    const active = statusFilter === tab.value;
-                    return (
-                      <button
-                        key={tab.value}
-                        type="button"
-                        role="tab"
-                        aria-selected={active}
-                        onClick={() => setStatusFilter(tab.value)}
-                        className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                          active
-                            ? "bg-foreground text-background"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        }`}
-                      >
-                        {tab.label}
-                        <span className="tabular-nums opacity-60">
-                          {countFor(tab.value)}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+    {/* Search */}
+    <div className="relative w-full sm:max-w-md">
+      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
-              {loading ? (
-                <div className="flex items-center justify-center gap-2 p-12 text-sm text-muted-foreground">
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Loading invoices...
-                </div>
-              ) : filtered.length === 0 ? (
-                <div className="flex flex-col items-center px-4 py-14 text-center">
-                  <div className="mb-4 rounded-full bg-muted p-4">
-                    <Receipt className="h-7 w-7 text-muted-foreground" />
-                  </div>
-                  <h3 className="font-semibold">
-                    {invoices.length === 0
-                      ? "No invoices yet"
-                      : "No matching invoices"}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {invoices.length === 0
-                      ? "Create your first invoice to get started."
-                      : "Try another search term or status."}
-                  </p>
-                  {invoices.length === 0 && (
+      <Input
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        placeholder="Search by invoice number or customer..."
+        className="h-9 pl-9 text-sm"
+        aria-label="Search invoices"
+      />
+    </div>
+
+    {/* Filters */}
+    <div className="flex flex-wrap items-center gap-2">
+
+      {/* Status Filter */}
+      <select
+        value={statusFilter}
+        onChange={(event) => setStatusFilter(event.target.value)}
+        aria-label="Filter invoices by status"
+        className="h-9 rounded-md border border-border bg-background px-3 text-sm"
+      >
+        <option value="all">All Statuses</option>
+        <option value="draft">Draft</option>
+        <option value="sent">Unpaid</option>
+        <option value="partially_paid">Partially Paid</option>
+        <option value="overdue">Overdue</option>
+        <option value="paid">Paid</option>
+      </select>
+
+      {/* Create Invoice */}
+      {/* <Button
+        size="sm"
+        className="h-9"
+        onClick={() => router.push("/invoices/new")}
+      >
+        <Plus className="mr-2 h-4 w-4" />
+        Create Invoice
+      </Button> */}
+
+    </div>
+  </div>
+
+  {/* Table */}
+  <div className="w-full overflow-x-auto">
+
+    <table className="w-full min-w-[900px] text-sm">
+
+      {/* Table Header */}
+      <thead className="border-b bg-muted/40">
+
+        <tr className="text-left text-xs font-semibold text-muted-foreground">
+
+          <th className="px-4 py-3">
+            Invoice #
+          </th>
+
+          <th className="px-4 py-3">
+            Customer Name
+          </th>
+
+          <th className="px-4 py-3">
+            Invoice Date
+          </th>
+
+          <th className="px-4 py-3 text-right">
+            Total Amount
+          </th>
+
+          <th className="px-4 py-3 text-right">
+            GST Amount
+          </th>
+
+          <th className="px-4 py-3">
+            Payment Status
+          </th>
+
+          <th className="px-4 py-3 text-right">
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+      {/* Table Body */}
+      <tbody className="divide-y">
+
+        {loading ? (
+
+          <tr>
+            <td
+              colSpan={7}
+              className="py-12 text-center text-muted-foreground"
+            >
+              <Loader2 className="mx-auto mb-2 h-5 w-5 animate-spin" />
+              Loading invoices...
+            </td>
+          </tr>
+
+        ) : filtered.length === 0 ? (
+
+          <tr>
+            <td
+              colSpan={7}
+              className="py-12 text-center text-muted-foreground"
+            >
+              No invoices found.
+            </td>
+          </tr>
+
+        ) : (
+
+          filtered.map(({ invoice, status }) => (
+
+            <tr
+              key={invoice.id}
+              className="transition-colors hover:bg-muted/30"
+            >
+
+              {/* Invoice Number */}
+              <td className="whitespace-nowrap px-4 py-3">
+
+                <span className="font-medium text-primary">
+                  {invoice.invoiceNumber || invoice.id}
+                </span>
+
+              </td>
+
+              {/* Customer */}
+              <td className="px-4 py-3">
+
+                <span className="font-medium">
+                  {invoice.customerName || "Unknown customer"}
+                </span>
+
+              </td>
+
+              {/* Invoice Date */}
+              <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
+
+                {formatDate(invoice.issueDate)}
+
+              </td>
+
+              {/* Total */}
+              <td className="whitespace-nowrap px-4 py-3 text-right font-medium tabular-nums">
+
+                {formatINR(invoice.total)}
+
+              </td>
+
+              {/* GST */}
+              <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums">
+
+                {formatINR(invoice.tax)}
+
+              </td>
+
+              {/* Status */}
+              <td className="px-4 py-3">
+
+                <InvoiceStatus status={status} />
+
+              </td>
+
+              {/* Actions */}
+              <td className="px-4 py-3">
+
+                <div className="flex items-center justify-end gap-1">
+
+                  {/* View */}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    title="View invoice"
+                    onClick={() => {
+                      setSelectedId(invoice.id);
+                      setSheetOpen(true);
+                    }}
+                  >
+<Eye className="h-4 w-4" />
+                  </Button>
+
+                  {/* Edit */}
+                  {status === "draft" && detailProps.canEdit && (
                     <Button
-                      className="mt-4"
-                      onClick={() => router.push("/invoices/new")}
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      title="Edit invoice"
+                      onClick={() => detailProps.onEdit(invoice)}
                     >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Create Invoice
+                      <Pencil className="h-4 w-4" />
                     </Button>
                   )}
+
+                  {/* PDF */}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    title="Download PDF"
+                    onClick={() => handleDownloadPDF(invoice)}
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
+
+                  {/* Delete */}
+                  {status === "draft" && detailProps.canDelete && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-red-600 hover:text-red-700"
+                      title="Delete invoice"
+                      disabled={actionLoading === invoice.id}
+                      onClick={() => handleDeleteInvoice(invoice)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+
                 </div>
-              ) : (
-                <ul className="max-h-[70vh] divide-y overflow-y-auto">
-                  {filtered.map(({ invoice, status }) => {
-                    const active = selectedRow?.invoice.id === invoice.id;
-                    const total = invoice.total ?? 0;
-                    const pct =
-                      total > 0
-                        ? Math.min(
-                            100,
-                            ((invoice.amountPaid ?? 0) / total) * 100
-                          )
-                        : 0;
 
-                    return (
-                      <li key={invoice.id}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedId(invoice.id);
-                            setSheetOpen(true);
-                          }}
-                          aria-current={active}
-                          className={`relative flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-muted/50 ${
-                            active ? "bg-muted/60" : ""
-                          }`}
-                        >
-                          {active && (
-                            <span className="absolute inset-y-0 left-0 hidden w-0.5 bg-foreground xl:block" />
-                          )}
+              </td>
 
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-sm font-semibold uppercase text-background">
-                            {(invoice.customerName || "?").charAt(0)}
-                          </span>
+            </tr>
 
-                          <span className="min-w-0 flex-1">
-                            <span className="flex items-center justify-between gap-2">
-                              <span className="truncate text-sm font-semibold">
-                                {invoice.customerName || "Unknown customer"}
-                              </span>
-                              <span className="shrink-0 text-sm font-semibold tabular-nums">
-                                {formatINR(invoice.total)}
-                              </span>
-                            </span>
-                            <span className="mt-0.5 flex items-center justify-between gap-2">
-                              <span
-                                className="truncate text-xs text-muted-foreground"
-                                title={invoice.invoiceNumber || invoice.id}
-                              >
-                                {invoice.invoiceNumber || invoice.id}
-                              </span>
-                              <InvoiceStatus status={status} small />
-                            </span>
-                            {status !== "draft" && status !== "paid" && pct > 0 && (
-                              <span className="mt-2 block h-1 overflow-hidden rounded-full bg-border">
-                                <span
-                                  className="block h-full rounded-full bg-foreground"
-                                  style={{ width: `${pct}%` }}
-                                />
-                              </span>
-                            )}
-                          </span>
+          ))
 
-                          <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground xl:hidden" />
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </section>
+        )}
 
-            {/* Desktop detail panel */}
-            <div className="hidden xl:sticky xl:top-4 xl:block">
-              {selectedRow ? (
-                <section className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-                  <InvoiceDetail
-                    invoice={selectedRow.invoice}
-                    status={selectedRow.status}
-                    {...detailProps}
-                  />
-                </section>
-              ) : (
-                !loading && (
-                  <section className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed bg-card p-8 text-center text-sm text-muted-foreground">
-                    <Receipt className="mb-3 h-8 w-8" />
-                    Select an invoice to see its details.
-                  </section>
-                )
-              )}
-            </div>
-          </div>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
         </div>
       </main>
 
       {/* Mobile / tablet detail sheet */}
       {sheetRow && (
         <div
-          className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 sm:items-center sm:p-4 xl:hidden"
+         className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
           onClick={() => setSheetOpen(false)}
         >
           <div
@@ -678,12 +728,12 @@ const detailProps = {
             aria-modal="true"
             aria-label="Record payment"
             onClick={(event) => event.stopPropagation()}
-            className="max-h-[92vh] w-full overflow-y-auto rounded-t-2xl border bg-card p-5 shadow-xl sm:max-w-lg sm:rounded-2xl"
+            className="max-h-[92vh] w-full overflow-y-auto rounded-t-2xl border bg-card p-4 shadow-xl sm:max-w-lg sm:rounded-2xl"
           >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-lg font-semibold">Record Payment</h2>
-                <p className="mt-0.5 text-sm text-muted-foreground">
+                <p className="mt-0.5 text-xs sm:text-sm text-muted-foreground">
                   {paymentInvoice.invoiceNumber} · {paymentInvoice.customerName}
                 </p>
               </div>
@@ -704,8 +754,8 @@ const detailProps = {
               </span>
             </div>
 
-            <form onSubmit={handleRecordPayment} className="mt-4 space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
+            <form onSubmit={handleRecordPayment} className="mt-3 space-y-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-1">
                   <label htmlFor="pay-amount" className="text-sm font-medium">
                     Payment Amount (₹)
@@ -745,7 +795,7 @@ const detailProps = {
                     id="pay-method"
                     value={paymentMethod}
                     onChange={(event) => setPaymentMethod(event.target.value)}
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm"
+                    className="h-9 w-full rounded-md border border-border bg-background px-2.5 text-xs sm:text-sm"
                   >
                     <option value="upi">UPI</option>
                     <option value="cash">Cash</option>
@@ -805,9 +855,9 @@ function Metric({
   className?: string;
 }) {
   return (
-    <div className={`border-border p-4 sm:p-5 ${className}`}>
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-1.5 truncate text-xl font-bold tracking-tight tabular-nums sm:text-2xl">
+    <div className={`border-border p-2.5 sm:p-3.5 ${className}`}>
+      <p className="text-[10px] sm:text-[11px] text-muted-foreground">{label}</p>
+      <p className="mt-1 truncate text-base font-semibold tracking-tight tabular-nums sm:text-lg">
         {value}
       </p>
     </div>
@@ -852,17 +902,17 @@ function InvoiceDetail({
   return (
     <div>
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 border-b p-5">
+      <div className="flex items-center justify-between gap-2.5 border-b p-3 sm:p-3.5">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-foreground text-base font-semibold uppercase text-background">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground text-base font-semibold uppercase text-background">
             {(invoice.customerName || "?").charAt(0)}
           </span>
           <div className="min-w-0">
-            <p className="truncate text-lg font-semibold leading-tight">
+            <p className="truncate text-sm font-semibold leading-tight">
               {invoice.customerName || "Unknown customer"}
             </p>
             <p
-              className="mt-0.5 truncate text-xs text-muted-foreground"
+              className="mt-0.5 truncate text-[11px] text-muted-foreground"
               title={invoice.invoiceNumber || invoice.id}
             >
               {invoice.invoiceNumber || invoice.id}
@@ -886,21 +936,21 @@ function InvoiceDetail({
       </div>
 
       {/* Balance hero */}
-      <div className="p-5">
+      <div className="p-3 sm:p-3.5">
         <p className="text-xs uppercase tracking-wide text-muted-foreground">
           {status === "paid" ? "Settled" : "Balance due"}
         </p>
-        <p className="mt-1 text-3xl font-bold tracking-tight tabular-nums sm:text-4xl">
+        <p className="mt-1 text-xl font-bold tracking-tight tabular-nums sm:text-2xl">
           {formatINR(balance)}
         </p>
 
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-border">
+        <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-border">
           <div
             className="h-full rounded-full bg-foreground transition-all"
             style={{ width: `${pct}%` }}
           />
         </div>
-        <div className="mt-2 flex justify-between text-xs text-muted-foreground tabular-nums">
+        <div className="mt-2 flex justify-between text-[11px] text-muted-foreground tabular-nums">
           <span>Paid {formatINR(paid)}</span>
           <span>of {formatINR(total)}</span>
         </div>
@@ -908,14 +958,14 @@ function InvoiceDetail({
 
       {/* Dates */}
       <div className="grid grid-cols-2 border-y">
-        <div className="border-r p-5">
-          <p className="text-xs text-muted-foreground">Issued</p>
+        <div className="border-r p-3 sm:p-3.5">
+          <p className="text-[11px] text-muted-foreground">Issued</p>
           <p className="mt-1 text-sm font-medium">
             {formatDate(invoice.issueDate)}
           </p>
         </div>
-        <div className="p-5">
-          <p className="text-xs text-muted-foreground">Due</p>
+        <div className="p-3 sm:p-3.5">
+          <p className="text-[11px] text-muted-foreground">Due</p>
           <p
             className={`mt-1 text-sm font-medium ${
               status === "overdue" ? "text-red-600 dark:text-red-400" : ""
@@ -927,19 +977,19 @@ function InvoiceDetail({
       </div>
 
       {/* Line items */}
-      <div className="p-5">
-        <h3 className="text-sm font-semibold">Items</h3>
+      <div className="p-3 sm:p-3.5">
+        <h3 className="text-[13px] font-semibold">Items</h3>
 
         {invoice.items && invoice.items.length > 0 ? (
-          <ul className="mt-3 divide-y">
+          <ul className="mt-2.5 divide-y">
             {invoice.items.map((item, index) => (
               <li
                 key={`${item.description}-${index}`}
-                className="flex items-start justify-between gap-4 py-2.5 text-sm"
+                className="flex items-start justify-between gap-4 py-2 text-xs sm:text-sm"
               >
                 <div className="min-w-0">
                   <p className="truncate font-medium">{item.description}</p>
-                  <p className="text-xs text-muted-foreground tabular-nums">
+                  <p className="text-[11px] text-muted-foreground tabular-nums">
                     {item.quantity} × {formatINR(item.unitPrice)}
                   </p>
                 </div>
@@ -955,7 +1005,7 @@ function InvoiceDetail({
           </p>
         )}
 
-        <dl className="mt-3 space-y-1.5 rounded-xl bg-muted/50 p-4 text-sm tabular-nums">
+        <dl className="mt-2 space-y-1 rounded-lg bg-muted/50 p-2.5 text-xs sm:text-sm tabular-nums">
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Subtotal</dt>
             <dd>{formatINR(invoice.subtotal)}</dd>
@@ -974,11 +1024,11 @@ function InvoiceDetail({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-wrap gap-2 border-t bg-muted/30 p-5">
+      <div className="flex flex-wrap gap-1.5 border-t bg-muted/30 p-3">
         {isDraft && (
           <Button
             type="button"
-            className="min-w-[160px] flex-1"
+            className="min-w-[120px] flex-1"
             disabled={busy}
             onClick={() => onIssue(invoice)}
           >
@@ -994,7 +1044,7 @@ function InvoiceDetail({
         {canPay && (
           <Button
             type="button"
-            className="min-w-[160px] flex-1"
+            className="min-w-[120px] flex-1"
             onClick={() => onPay(invoice)}
           >
             <Wallet className="mr-2 h-4 w-4" />

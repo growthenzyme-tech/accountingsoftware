@@ -484,16 +484,16 @@ router.refresh();
 
 
 return (
-  <div className="flex min-h-screen w-full min-w-0 bg-background text-foreground">
-    <div className="hidden shrink-0 md:block">
+  <div className="min-h-screen bg-background text-foreground">
+    <div className="hidden md:block">
       <Sidebar />
     </div>
 
-    <main className="min-w-0 flex-1">
+    <main className="min-w-0 flex-1 md:ml-64">
       <Header />
 
 
-        <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto w-full max-w-[1500px] space-y-5 p-3 sm:p-4 lg:p-6">
           <button
             type="button"
             onClick={() => router.push("/invoices")}
@@ -504,16 +504,15 @@ return (
           </button>
 
           <div>
-          <h1 className="text-2xl font-bold tracking-tight">
+     <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
   {isEditing ? "Edit Invoice" : "Create Invoice"}
 </h1>
 
 <p className="mt-1 text-sm text-muted-foreground">
   {isEditing
-    ? "Update the existing invoice details."
-    : "Add customer details and invoice line items."}
-</p>
-          </div>
+    ? "Update the customer, dates, and line items for this draft."
+    : "Create a customer invoice and review the totals before saving."}
+</p>      </div>
 
           {error && (
             <div
@@ -524,258 +523,334 @@ return (
             </div>
           )}
 
-          <form onSubmit={handleSave} className="space-y-6">
-            <section className="space-y-4 rounded-xl border bg-card p-5 shadow-sm">
-              <h2 className="font-semibold">Invoice Details</h2>
+        <form onSubmit={handleSave} className="space-y-5">
+  <div className="grid grid-cols-1 items-start gap-5">
 
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="space-y-2">
-                  <label htmlFor="customer" className="text-sm font-medium">
-                    Customer *
-                  </label>
-                  <select
-                    id="customer"
-                    value={customerId}
-                    onChange={(event) => setCustomerId(event.target.value)}
-                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                    required
-                    disabled={customersLoading}
-                  >
-                    <option value="">
-                      {customersLoading
-                        ? "Loading customers..."
-                        : "Select customer"}
-                    </option>
-                    {customers.map((customer) => (
-                      <option key={customer.id} value={customer.id}>
-                        {customer.name}
-                      </option>
-                    ))}
-                  </select>
-                  {!customersLoading && customers.length === 0 && (
-                    <p className="text-xs text-muted-foreground">
-                      Add a customer in Contacts before creating an invoice.
-                    </p>
-                  )}
-                </div>
+    {/* LEFT COLUMN */}
+    <div className="min-w-0 space-y-5">
 
-                <div className="space-y-2">
-                  <label htmlFor="issue-date" className="text-sm font-medium">
-                    Invoice Date *
-                  </label>
-                  <Input
-                    id="issue-date"
-                    type="date"
-                    value={issueDate}
-                    onChange={(event) => {
-                      setIssueDate(event.target.value);
-                      if (dueDate < event.target.value) {
-                        setDueDate(event.target.value);
+      {/* Invoice Details */}
+      <section className="overflow-hidden rounded-xl border bg-card shadow-sm">
+        <div className="border-b px-4 py-3.5 sm:px-5">
+          <h2 className="text-sm font-semibold">Invoice Details</h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Choose the customer and set the invoice dates.
+          </p>
+        </div>
+
+        <div className="grid gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-3">
+          {/* Customer */}
+          <div className="space-y-1.5 sm:col-span-2 xl:col-span-1">
+            <label htmlFor="customer" className="text-sm font-medium">
+              Customer *
+            </label>
+
+            <select
+              id="customer"
+              value={customerId}
+              onChange={(event) => setCustomerId(event.target.value)}
+              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+              required
+              disabled={customersLoading}
+            >
+              <option value="">
+                {customersLoading ? "Loading customers..." : "Select customer"}
+              </option>
+
+              {customers.map((customer) => (
+                <option key={customer.id} value={customer.id}>
+                  {customer.name}
+                </option>
+              ))}
+            </select>
+
+            {!customersLoading && customers.length === 0 && (
+              <p className="text-xs text-muted-foreground">
+                Add a customer in Contacts before creating an invoice.
+              </p>
+            )}
+          </div>
+
+          {/* Invoice Date */}
+          <div className="space-y-1.5">
+            <label htmlFor="issue-date" className="text-sm font-medium">
+              Invoice Date *
+            </label>
+
+            <Input
+              id="issue-date"
+              type="date"
+              className="h-9 text-sm"
+              value={issueDate}
+              onChange={(event) => {
+                setIssueDate(event.target.value);
+
+                if (dueDate < event.target.value) {
+                  setDueDate(event.target.value);
+                }
+              }}
+              required
+            />
+          </div>
+
+          {/* Due Date */}
+          <div className="space-y-1.5">
+            <label htmlFor="due-date" className="text-sm font-medium">
+              Due Date *
+            </label>
+
+            <Input
+              id="due-date"
+              type="date"
+              className="h-9 text-sm"
+              min={issueDate}
+              value={dueDate}
+              onChange={(event) => setDueDate(event.target.value)}
+              required
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Invoice Items */}
+      <section className="overflow-hidden rounded-xl border bg-card shadow-sm">
+        <div className="flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div>
+            <h2 className="text-sm font-semibold">Invoice Items</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Add descriptions, quantities, and unit prices.
+            </p>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-9 w-full sm:w-auto"
+            onClick={() =>
+              setItems((current) => [
+                ...current,
+                { description: "", quantity: 1, unitPrice: 0 },
+              ])
+            }
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Item
+          </Button>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm">
+            <thead className="border-b bg-muted/40 text-xs text-muted-foreground">
+              <tr>
+                <th className="px-4 py-3 font-medium">Description</th>
+                <th className="px-4 py-3 font-medium">Quantity</th>
+                <th className="px-4 py-3 font-medium">
+                  Unit Price ({accountingSettings.baseCurrency || "INR"})
+                </th>
+                <th className="px-4 py-3 text-right font-medium">Amount</th>
+                <th className="px-4 py-3" />
+              </tr>
+            </thead>
+
+            <tbody className="divide-y">
+              {items.map((item, index) => (
+                <tr key={index}>
+                  <td className="min-w-52 px-4 py-3">
+                    <Input
+                      className="h-9 text-sm"
+                      value={item.description}
+                      onChange={(event) =>
+                        updateItem(index, "description", event.target.value)
                       }
-                    }}
-                    required
-                  />
-                </div>
+                      placeholder="Item description"
+                      maxLength={300}
+                      required
+                    />
+                  </td>
 
-                <div className="space-y-2">
-                  <label htmlFor="due-date" className="text-sm font-medium">
-                    Due Date *
-                  </label>
-                  <Input
-                    id="due-date"
-                    type="date"
-                    min={issueDate}
-                    value={dueDate}
-                    onChange={(event) => setDueDate(event.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-            </section>
+                  <td className="min-w-28 px-4 py-3">
+                    <Input
+                      className="h-9 text-sm"
+                      type="number"
+                      min="0.01"
+                      step="any"
+                      value={item.quantity}
+                      onChange={(event) =>
+                        updateItem(index, "quantity", event.target.value)
+                      }
+                      required
+                    />
+                  </td>
 
-            <section className="overflow-hidden rounded-xl border bg-card shadow-sm">
-              <div className="flex flex-col justify-between gap-3 border-b p-5 sm:flex-row sm:items-center">
-                <div>
-                  <h2 className="font-semibold">Invoice Items</h2>
-                  <p className="text-sm text-muted-foreground">
-                    Add descriptions, quantities, and unit prices.
-                  </p>
-                </div>
+                  <td className="min-w-36 px-4 py-3">
+                    <Input
+                      className="h-9 text-sm"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={item.unitPrice}
+                      onChange={(event) =>
+                        updateItem(index, "unitPrice", event.target.value)
+                      }
+                      required
+                    />
+                  </td>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() =>
-                    setItems((current) => [
-                      ...current,
-                      { description: "", quantity: 1, unitPrice: 0 },
-                    ])
-                  }
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Item
-                </Button>
-              </div>
+                  <td className="whitespace-nowrap px-4 py-3 text-right font-medium tabular-nums">
+                    {money(
+                      Math.max(0, item.quantity) *
+                        Math.max(0, item.unitPrice)
+                    )}
+                  </td>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-muted/50 text-muted-foreground">
-                    <tr>
-                      <th className="px-4 py-3 font-medium">Description</th>
-                      <th className="px-4 py-3 font-medium">Quantity</th>
-                     <th className="px-4 py-3 font-medium">
-  Unit Price ({accountingSettings.baseCurrency || "INR"})</th>
-                      <th className="px-4 py-3 text-right font-medium">Amount</th>
-                      <th className="px-4 py-3" />
-                    </tr>
-                  </thead>
+                  <td className="px-4 py-3">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8"
+                      disabled={items.length === 1}
+                      onClick={() =>
+                        setItems((current) =>
+                          current.filter((_, i) => i !== index)
+                        )
+                      }
+                      aria-label={`Remove item ${index + 1}`}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-                  <tbody className="divide-y">
-                    {items.map((item, index) => (
-                      <tr key={index}>
-                        <td className="min-w-52 px-4 py-3">
-                          <Input
-                            value={item.description}
-                            onChange={(event) =>
-                              updateItem(index, "description", event.target.value)
-                            }
-                            placeholder="Item description"
-                            maxLength={300}
-                            required
-                          />
-                        </td>
-                        <td className="min-w-28 px-4 py-3">
-                          <Input
-                            type="number"
-                            min="0.01"
-                            step="any"
-                            value={item.quantity}
-                            onChange={(event) =>
-                              updateItem(index, "quantity", event.target.value)
-                            }
-                            required
-                          />
-                        </td>
-                        <td className="min-w-36 px-4 py-3">
-                          <Input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value={item.unitPrice}
-                            onChange={(event) =>
-                              updateItem(index, "unitPrice", event.target.value)
-                            }
-                            required
-                          />
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-right font-medium">
-                          {money(
-                            Math.max(0, item.quantity) *
-                              Math.max(0, item.unitPrice)
-                          )}
-                        </td>
-                        <td className="px-4 py-3">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            disabled={items.length === 1}
-                            onClick={() =>
-                              setItems((current) =>
-                                current.filter((_, i) => i !== index)
-                              )
-                            }
-                            aria-label={`Remove item ${index + 1}`}
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+    </div>
 
-            <section className="ml-auto max-w-md space-y-4 rounded-xl border bg-card p-5 shadow-sm">
+ 
+   {/* INVOICE SUMMARY - BELOW THE ITEMS */}
+<div className="min-w-0 space-y-5">
 
-  {/* Pricing mode — paste it here */}
-  <p className="text-xs text-muted-foreground">
-    Pricing mode:{" "}
-    {taxSettings.pricingMode === "inclusive"
-      ? "Tax included in item prices"
-      : "Tax added to item prices"}
-  </p>
+      {/* Invoice Summary */}
+      <section className="overflow-hidden rounded-xl border bg-card shadow-sm">
+        <div className="border-b p-4 sm:p-5">
+          <h2 className="text-sm font-semibold">Invoice Summary</h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Review totals before saving.
+          </p>
+        </div>
 
-  <div className="flex items-center justify-between">
-    <span className="text-sm text-muted-foreground">Subtotal</span>
-    <span className="font-medium">{money(subtotal)}</span>
+        <div className="space-y-4 p-4 sm:p-5">
+          <p className="rounded-md bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
+            Pricing mode:{" "}
+            {taxSettings.pricingMode === "inclusive"
+              ? "Tax included in item prices"
+              : "Tax added to item prices"}
+          </p>
+
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm text-muted-foreground">Subtotal</span>
+            <span className="text-sm font-medium tabular-nums">
+              {money(subtotal)}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            <label htmlFor="tax-rate" className="text-sm text-muted-foreground">
+              Tax (%)
+            </label>
+
+            <Input
+              id="tax-rate"
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              value={taxRate}
+              onChange={(event) => setTaxRate(Number(event.target.value))}
+              className="h-9 w-28"
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm text-muted-foreground">Tax Amount</span>
+            <span className="text-sm font-medium tabular-nums">
+              {money(tax)}
+            </span>
+          </div>
+
+          <div className="border-t pt-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="font-semibold">Total</span>
+              <span className="text-xl font-bold tabular-nums">
+                {money(total)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Helpful reminder */}
+      <section className="rounded-xl border bg-card p-4 sm:p-5">
+        <h2 className="text-sm font-semibold">Before you save</h2>
+        <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
+          <li>Select a customer from Contacts.</li>
+          <li>Check the invoice and due dates.</li>
+          <li>Review the line items and final total.</li>
+        </ul>
+      </section>
+
+   </div>
   </div>
 
-  <div className="flex items-center justify-between gap-4">
-    <label htmlFor="tax-rate" className="text-sm text-muted-foreground">
-      Tax (%)
-    </label>
-    <Input
-      id="tax-rate"
-      type="number"
-      min="0"
-      max="100"
-      step="0.01"
-      value={taxRate}
-      onChange={(event) => setTaxRate(Number(event.target.value))}
-      className="w-28"
-    />
-  </div>
+  {/* Form Actions */}
+  <div className="flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+    <p className="text-xs text-muted-foreground">
+      {isEditing
+        ? "Only draft invoices can be edited."
+        : "Review the totals before saving this invoice."}
+    </p>
 
-  <div className="flex items-center justify-between">
-    <span className="text-sm text-muted-foreground">Tax Amount</span>
-    <span className="font-medium">{money(tax)}</span>
-  </div>
+    <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <Button
+        type="button"
+        variant="outline"
+        className="h-9 w-full sm:w-auto"
+        onClick={() => router.push("/invoices")}
+        disabled={saving}
+      >
+        Cancel
+      </Button>
 
-  <div className="border-t pt-4">
-    <div className="flex items-center justify-between">
-      <span className="font-semibold">Total</span>
-      <span className="text-xl font-bold">{money(total)}</span>
+      <Button
+        type="submit"
+        className="h-9 w-full sm:w-auto"
+        disabled={
+          saving ||
+          customersLoading ||
+          taxSettingsLoading ||
+          accountingSettingsLoading ||
+          customers.length === 0
+        }
+      >
+        {saving ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Saving...
+          </>
+        ) : (
+          <>
+            <Save className="mr-2 h-4 w-4" />
+            {isEditing ? "Save Changes" : "Save Invoice"}
+          </>
+        )}
+      </Button>
     </div>
   </div>
-
-</section>
-
-            <div className="flex justify-end gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/invoices")}
-                disabled={saving}
-              >
-                Cancel
-              </Button>
-
-              <Button
-                type="submit"
-              disabled={
-  saving ||
-  customersLoading ||
-  taxSettingsLoading ||
-  accountingSettingsLoading ||
-  customers.length === 0
-}
-              >
-                {saving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="mr-2 h-4 w-4" />
-                    {isEditing ? "Save Changes" : "Save Invoice"}
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
+</form>
         </div>
       </main>
     </div>

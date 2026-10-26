@@ -260,12 +260,12 @@ async function handleDelete(contact: Contact) {
   <main className="min-w-0 flex-1 md:ml-64">
     <Header />
 
-    <div className="space-y-5 p-4 sm:p-6 lg:p-8">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
+          <div className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">
+              {/* <h1 className="text-2xl font-semibold tracking-tight">
                 Contacts
-              </h1>
+              </h1> */}
               <p className="mt-1 text-sm text-muted-foreground">
                 Manage your customers and vendors.
               </p>
@@ -273,11 +273,16 @@ async function handleDelete(contact: Contact) {
 
             {canCreate && (
   <Button
-    onClick={() => {
-      setError("");
-      setSuccess("");
-      setShowForm(true);
-    }}
+   onClick={() => {
+  setEditingContact(null);
+  setName("");
+  setEmail("");
+  setPhone("");
+  setType("customer");
+  setError("");
+  setSuccess("");
+  setShowForm(true);
+}}
   >
     <Plus className="mr-2 h-4 w-4" />
     Add Contact
@@ -303,12 +308,12 @@ async function handleDelete(contact: Contact) {
             </div>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <SummaryCard
               title="Total Contacts"
               value={contacts.length}
               icon={<Users className="h-5 w-5" />}
-              highlight
+              // highlight
             />
             <SummaryCard
               title="Customers"
@@ -323,35 +328,44 @@ async function handleDelete(contact: Contact) {
           </div>
 
          {showForm && (editingContact ? canEdit : canCreate) && (
-            <section className="rounded-xl border bg-card p-5 shadow-sm">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                <h2 className="text-lg font-semibold">
-  {editingContact ? "Edit Contact" : "Add Contact"}
-</h2>
-                  <p className="text-sm text-muted-foreground">
-                    Enter the contact details below.
-                  </p>
-                </div>
+            <section className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <div className="flex items-start justify-between gap-3 border-b px-4 py-3.5 sm:px-5">
+  <div className="flex min-w-0 items-center gap-3">
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground">
+      <Users className="h-4 w-4" />
+    </span>
 
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowForm(false)}
-                  aria-label="Close form"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
+    <div className="min-w-0">
+      <h2 className="text-sm font-semibold">
+        {editingContact ? "Edit Contact" : "Add Contact"}
+      </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
+      <p className="mt-0.5 text-xs text-muted-foreground">
+        Enter the contact details below.
+      </p>
+    </div>
+  </div>
+
+  <Button
+    type="button"
+    variant="ghost"
+    size="icon"
+    className="h-8 w-8 shrink-0"
+    onClick={() => setShowForm(false)}
+    aria-label="Close form"
+  >
+    <X className="h-4 w-4" />
+  </Button>
+</div>
+
+              <form onSubmit={handleSubmit} className="space-y-3 p-4 sm:p-5">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="contact-name" className="text-sm font-medium">
                       Contact Name *
                     </label>
                     <Input
+                    className="h-9 text-sm"
                       id="contact-name"
                       value={name}
                       onChange={(event) => setName(event.target.value)}
@@ -361,7 +375,7 @@ async function handleDelete(contact: Contact) {
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="contact-type" className="text-sm font-medium">
                       Contact Type *
                     </label>
@@ -371,7 +385,7 @@ async function handleDelete(contact: Contact) {
                       onChange={(event) =>
                         setType(event.target.value as ContactType)
                       }
-                      className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                      className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
                       required
                     >
                       <option value="customer">Customer</option>
@@ -380,11 +394,12 @@ async function handleDelete(contact: Contact) {
                     </select>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="contact-email" className="text-sm font-medium">
                       Email
                     </label>
                     <Input
+                    className="h-9 text-sm"
                       id="contact-email"
                       type="email"
                       value={email}
@@ -394,12 +409,13 @@ async function handleDelete(contact: Contact) {
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="contact-phone" className="text-sm font-medium">
                       Phone
                     </label>
                     
 <Input
+className="h-9 text-sm"
   id="contact-phone"
   type="tel"
   inputMode="numeric"
@@ -424,7 +440,7 @@ async function handleDelete(contact: Contact) {
                 </div>
 
                 <div className="flex justify-end gap-3">
-                  <Button type="submit" disabled={saving}>
+                  <Button type="submit" size="sm" className="h-9" disabled={saving}>
   {saving ? (
     <>
       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -457,14 +473,14 @@ async function handleDelete(contact: Contact) {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-[minmax(240px,1fr)_170px]">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     placeholder="Search contacts by name ..."
-                    className="pl-9 sm:w-64"
+                    className="h-10 w-full pl-9 sm:w-64"
                     aria-label="Search contacts"
                   />
                 </div>
@@ -472,7 +488,7 @@ async function handleDelete(contact: Contact) {
                 <select
                   value={filter}
                   onChange={(event) => setFilter(event.target.value)}
-                  className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm sm:w-[170px]"
                   aria-label="Filter contacts by type"
                 >
                   <option value="all">All contacts</option>
@@ -506,7 +522,16 @@ async function handleDelete(contact: Contact) {
                 {!search && filter === "all" && canCreate && (
                   <Button
                     className="mt-4"
-                    onClick={() => setShowForm(true)}
+                    onClick={() => {
+  setEditingContact(null);
+  setName("");
+  setEmail("");
+  setPhone("");
+  setType("customer");
+  setError("");
+  setSuccess("");
+  setShowForm(true);
+}}
                   >
                     <Plus className="mr-2 h-4 w-4" />
                     Add Contact
@@ -515,24 +540,24 @@ async function handleDelete(contact: Contact) {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
+                <table className="w-full min-w-[760px] text-left text-sm">
                   <thead className="bg-muted/50 text-muted-foreground">
                     <tr>
-                      <th className="px-5 py-3 font-medium">Contact</th>
-                      <th className="px-5 py-3 font-medium">Email</th>
-                      <th className="px-5 py-3 font-medium">Phone</th>
-                      <th className="px-5 py-3 font-medium">Type</th>
-                      <th className="px-5 py-3 text-right font-medium">Actions</th>
+                      <th className="px-4 py-3 font-medium">Contact</th>
+                      <th className="px-4 py-3 font-medium">Email</th>
+                      <th className="px-4 py-3 font-medium">Phone</th>
+                      <th className="px-4 py-3 font-medium">Type</th>
+                      <th className="px-4 py-3 text-right font-medium">Actions</th>
                     </tr>
                   </thead>
 
                   <tbody className="divide-y">
                     {filteredContacts.map((contact) => (
                       <tr key={contact.id} className="hover:bg-muted/30">
-                        <td className="px-5 py-4 font-medium">
+                        <td className="px-4 py-3 font-medium">
                           {contact.name}
                         </td>
-                        <td className="px-5 py-4 text-muted-foreground">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {contact.email ? (
                             <span className="flex items-center gap-2">
                               <Mail className="h-4 w-4 shrink-0" />
@@ -542,7 +567,7 @@ async function handleDelete(contact: Contact) {
                             "—"
                           )}
                         </td>
-                        <td className="px-5 py-4 text-muted-foreground">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {contact.phone ? (
                             <span className="flex items-center gap-2">
                               <Phone className="h-4 w-4 shrink-0" />
@@ -552,10 +577,10 @@ async function handleDelete(contact: Contact) {
                             "—"
                           )}
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-3">
                           <ContactBadge type={contact.type} />
                         </td>
-<td className="px-5 py-4">
+<td className="px-4 py-3">
   <div className="flex justify-end gap-2">
     {canEdit && (
       <Button
@@ -604,56 +629,25 @@ function SummaryCard({
   title,
   value,
   icon,
-  highlight = false,
 }: {
   title: string;
   value: number;
   icon: React.ReactNode;
-  highlight?: boolean;
 }) {
   return (
-    <div
-      className={`relative overflow-hidden rounded-2xl border p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg ${
-        highlight
-          ? "border-foreground bg-foreground text-background"
-          : "bg-card"
-      }`}
-    >
-      {/* soft decorative rings */}
-      <span
-        aria-hidden
-        className={`pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full border ${
-          highlight ? "border-background/15" : "border-foreground/10"
-        }`}
-      />
-      <span
-        aria-hidden
-        className={`pointer-events-none absolute -right-3 -top-3 h-16 w-16 rounded-full border ${
-          highlight ? "border-background/15" : "border-foreground/10"
-        }`}
-      />
-
-      <div className="relative flex items-start justify-between gap-3">
-        <div>
-          <p
-            className={`text-xs font-medium uppercase tracking-wider ${
-              highlight ? "text-background/70" : "text-muted-foreground"
-            }`}
-          >
+    <div className="flex min-h-[125px] flex-col rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-xs text-muted-foreground">
             {title}
           </p>
-          <p className="mt-3 text-4xl font-bold tracking-tight tabular-nums">
+
+          <p className="mt-3 break-words text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
             {value}
           </p>
         </div>
 
-        <span
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-            highlight
-              ? "bg-background/15 text-background"
-              : "bg-foreground text-background"
-          }`}
-        >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
           {icon}
         </span>
       </div>

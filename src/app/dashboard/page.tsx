@@ -128,6 +128,7 @@ const [cashFlowData, setCashFlowData] =
   >([]);
 
 
+
   const invalidDateRange =
     reportingPeriod === "custom" &&
     startDate !== "" &&
@@ -135,6 +136,7 @@ const [cashFlowData, setCashFlowData] =
     startDate > endDate;
 
     
+
 
 useEffect(() => {
   if (permissionsLoading) return;
@@ -193,7 +195,7 @@ async function loadDashboard() {
         );
       }
 
-     
+      
 const invoices: DashboardInvoice[] = Array.isArray(
   invoiceData.invoices
 )
@@ -207,7 +209,7 @@ const entries: DashboardEntry[] = Array.isArray(
   : [];
 
 
-  console.log("Ledger data:", ledgerData);
+console.log("Ledger data:", ledgerData);
 
 //   console.log(
 //   "Dashboard journal entries:",
@@ -233,6 +235,7 @@ const accounts: DashboardAccount[] = Array.isArray(
   : [];
 
   
+
 
 const cashAccounts = accounts.filter(
   (account) =>
@@ -346,7 +349,6 @@ const calculatedCashFlow = Array.from(monthlyCashFlow.values());
           netProfit: Number(report.netProfit) || 0,
           outstandingInvoices,
         });
-
         
 setRecentActivity(activity);
 setCashFlowData(calculatedCashFlow);
@@ -445,16 +447,16 @@ const handleBackToLogin = async () => {
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="mx-auto w-full max-w-[1600px] space-y-7 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto w-full max-w-[1600px] space-y-5 p-3 sm:p-4 lg:p-5">
           {/* Financial Overview and primary actions */}
-          <section className="rounded-xl border border-border bg-card/40 p-5 sm:p-6">
-            <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-              <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between xl:flex-1">
+          <section className="rounded-xl border border-border bg-card p-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between xl:flex-1">
                 <div>
-                  <h1 className="text-2xl font-bold tracking-tight">
+                  <h1 className="text-[21px] font-bold tracking-tight leading-tight">
                     Financial Overview
                   </h1>
-                  <p className="mt-1 text-sm text-muted-foreground">
+                  <p className="mt-1 text-[12px] text-muted-foreground leading-tight">
                     Monitor your business finances in one place.
                   </p>
                 </div>
@@ -462,27 +464,27 @@ const handleBackToLogin = async () => {
                 <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
                   <a
                     href="/invoices"
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
                     Create Invoice
-                    <ArrowUpRight className="h-4 w-4" />
+                    <ArrowUpRight className="h-3.5 w-3.5" />
                   </a>
                   <a
                     href="/contacts"
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-[13px] font-medium text-foreground transition-colors hover:bg-accent"
                   >
                     Add Contact
-                    <ArrowDownRight className="h-4 w-4" />
+                    <ArrowDownRight className="h-3.5 w-3.5" />
                   </a>
                 </div>
               </div>
 
-              <div className="grid w-full grid-cols-1 gap-3 xl:w-auto xl:min-w-[220px]">
+              <div className="grid w-full grid-cols-1 gap-2 sm:w-auto sm:min-w-[200px]">
                 {/* Reporting Period */}
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   <label
                     htmlFor="reporting-period"
-                    className="text-sm text-muted-foreground"
+                    className="text-[12px] text-muted-foreground leading-tight"
                   >
                     Reporting period
                   </label>
@@ -493,7 +495,7 @@ const handleBackToLogin = async () => {
                       onChange={(event) =>
                         setReportingPeriod(event.target.value as ReportingPeriod)
                       }
-                      className="h-10 w-full min-w-[180px] appearance-none rounded-lg border border-border bg-background py-2 pl-3 pr-9 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-ring"
+                      className="h-8 w-full min-w-[150px] appearance-none rounded-lg border border-border bg-background py-1 pl-2.5 pr-7 text-[12px] text-foreground outline-none transition-shadow focus:ring-2 focus:ring-ring"
                     >
                       <option value="this-month">This Month</option>
                       <option value="last-month">Last Month</option>
@@ -502,16 +504,16 @@ const handleBackToLogin = async () => {
                     </select>
                     <ChevronDown
                       aria-hidden="true"
-                      className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
                     />
                   </div>
                 </div>
 
                 {/* Custom Date Range */}
                 {reportingPeriod === "custom" && (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                    <div className="space-y-1">
-                      <label htmlFor="start-date" className="text-sm text-muted-foreground">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <div className="space-y-0.5">
+                      <label htmlFor="start-date" className="text-[12px] text-muted-foreground leading-tight">
                         Start date
                       </label>
                       <input
@@ -521,11 +523,11 @@ const handleBackToLogin = async () => {
                         max={endDate || undefined}
                         onChange={(event) => setStartDate(event.target.value)}
                         aria-invalid={invalidDateRange}
-                        className="h-10 w-full min-w-0 rounded-lg border border-border bg-background px-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring"
+                        className="h-8 w-full min-w-0 rounded-lg border border-border bg-background px-2 text-[12px] outline-none transition-shadow focus:ring-2 focus:ring-ring"
                       />
                     </div>
-                    <div className="space-y-1">
-                      <label htmlFor="end-date" className="text-sm text-muted-foreground">
+                    <div className="space-y-0.5">
+                      <label htmlFor="end-date" className="text-[12px] text-muted-foreground leading-tight">
                         End date
                       </label>
                       <input
@@ -535,10 +537,10 @@ const handleBackToLogin = async () => {
                         min={startDate || undefined}
                         onChange={(event) => setEndDate(event.target.value)}
                         aria-invalid={invalidDateRange}
-                        className="h-10 w-full min-w-0 rounded-lg border border-border bg-background px-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring"
+                        className="h-8 w-full min-w-0 rounded-lg border border-border bg-background px-2 text-[12px] outline-none transition-shadow focus:ring-2 focus:ring-ring"
                       />
                       {invalidDateRange && (
-                        <p className="text-sm text-destructive" role="alert">
+                        <p className="text-[12px] text-destructive leading-tight" role="alert">
                           End date must be on or after the start date.
                         </p>
                       )}
@@ -546,7 +548,7 @@ const handleBackToLogin = async () => {
                   </div>
                 )}
 
-                <p className="text-left text-xs text-muted-foreground xl:text-right" aria-live="polite">
+                <p className="text-left text-[11px] text-muted-foreground leading-tight sm:text-right" aria-live="polite">
                   {invalidDateRange
                     ? "End date must be on or after the start date."
                     : !dateRange
@@ -560,117 +562,116 @@ const handleBackToLogin = async () => {
           </section>
 
           {/* Financial Statistics */}
-          
-<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
-  {[
-    {
-      title: "Total Revenue",
-      value: financialStats.revenue,
-      note: "Selected reporting period",
-      icon: TrendingUp,
-      color: "text-emerald-600 dark:text-emerald-400",
-    },
-    {
-      title: "Total Expenses",
-      value: financialStats.expenses,
-      note: "Selected reporting period",
-      icon: TrendingDown,
-      color: "text-rose-600 dark:text-rose-400",
-    },
-    {
-      title: "Net Profit",
-      value: financialStats.netProfit,
-      note: "Based on posted transactions",
-      icon: Wallet,
-      color: "text-blue-600 dark:text-blue-400",
-    },
-    {
-      title: "Outstanding Invoices",
-      value: financialStats.outstandingInvoices,
-      note: "Non-draft, unpaid invoices",
-      icon: FileText,
-      color: "text-amber-600 dark:text-amber-400",
-    },
-  ].map((stat) => {
-    const Icon = stat.icon;
+          <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: "Total Revenue",
+                value: financialStats.revenue,
+                note: "Selected reporting period",
+                icon: TrendingUp,
+                color: "text-emerald-600 dark:text-emerald-400",
+              },
+              {
+                title: "Total Expenses",
+                value: financialStats.expenses,
+                note: "Selected reporting period",
+                icon: TrendingDown,
+                color: "text-rose-600 dark:text-rose-400",
+              },
+              {
+                title: "Net Profit",
+                value: financialStats.netProfit,
+                note: "Based on posted transactions",
+                icon: Wallet,
+                color: "text-blue-600 dark:text-blue-400",
+              },
+              {
+                title: "Outstanding Invoices",
+                value: financialStats.outstandingInvoices,
+                note: "Non-draft, unpaid invoices",
+                icon: FileText,
+                color: "text-amber-600 dark:text-amber-400",
+              },
+            ].map((stat) => {
+              const Icon = stat.icon;
 
-    return (
-      <article
-        key={stat.title}
-        className="flex min-h-[150px] flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
-      >
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">
-            {stat.title}
-          </p>
-          <Icon className={`h-5 w-5 ${stat.color}`} />
-        </div>
+              return (
+                <article
+                  key={stat.title}
+                  className="flex min-h-[110px] flex-col rounded-xl border border-border bg-card p-3 shadow-sm transition-shadow hover:shadow-md"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[12px] font-medium text-muted-foreground leading-tight">
+                      {stat.title}
+                    </p>
+                    <Icon className={`h-4 w-4 ${stat.color}`} />
+                  </div>
 
-        <p className="mt-4 break-words text-2xl font-semibold tracking-tight tabular-nums sm:text-[1.75rem]">
-          {dataLoading ? (
-            <Loader2 className="h-6 w-6 animate-spin" />
-          ) : (
-            money(stat.value)
-          )}
-        </p>
+                  <p className="mt-2 break-words text-[24px] font-semibold tracking-tight tabular-nums leading-tight">
+                    {dataLoading ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      money(stat.value)
+                    )}
+                  </p>
 
-        <p className="mt-2 text-xs text-muted-foreground">
-          {stat.note}
-        </p>
-      </article>
-    );
-  })}
-</section>
+                  <p className="mt-1 text-[11px] text-muted-foreground leading-tight">
+                    {stat.note}
+                  </p>
+                </article>
+              );
+            })}
+          </section>
 
 
           {/* Cash Flow and Recent Activity */}
-          <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 2xl:grid-cols-3">
-            <article className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6 2xl:col-span-2">
+          <section className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <article className="min-w-0 rounded-xl border border-border bg-card p-4 lg:col-span-2">
               <div>
-                <h2 className="text-lg font-semibold">
+                <h2 className="text-[18px] font-semibold leading-tight">
                   Cash Flow
                 </h2>
 
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 text-[12px] text-muted-foreground leading-tight">
                   Cash received versus cash paid
                 </p>
 
-                <div className="mt-6">
+                <div className="mt-4">
                   <CashFlowChart data={cashFlowData} />
 
-                  <p className="mt-3 text-xs text-muted-foreground">
+                  <p className="mt-2 text-[11px] text-muted-foreground leading-tight">
                     Illustrative sample data — not actual business cash flow.
                   </p>
                 </div>
               </div>
             </article>
 
-            <article className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6">
-              <h2 className="text-lg font-semibold">
+            <article className="min-w-0 rounded-xl border border-border bg-card p-4">
+              <h2 className="text-[18px] font-semibold leading-tight">
                 Recent Activity
               </h2>
 
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-[12px] text-muted-foreground leading-tight">
                 Your latest financial records
               </p>
 
               
-<div className="mt-5 divide-y divide-border">
+<div className="mt-3 divide-y divide-border">
   {dataError && (
-    <p role="alert" className="text-sm text-red-600">
+    <p role="alert" className="text-sm text-red-600 leading-tight">
       {dataError}
     </p>
   )}
 
   {dataLoading ? (
-    <div className="flex justify-center py-8">
-      <Loader2 className="h-6 w-6 animate-spin" />
+    <div className="flex justify-center py-6">
+      <Loader2 className="h-5 w-5 animate-spin" />
     </div>
   ) : recentActivity.length === 0 ? (
-    <div className="flex min-h-40 flex-col items-center justify-center text-center">
-      <FileText className="mb-3 h-8 w-8 text-muted-foreground" />
-      <p className="font-medium">No activity to display</p>
-      <p className="mt-2 text-sm text-muted-foreground">
+    <div className="flex min-h-36 flex-col items-center justify-center text-center">
+      <FileText className="mb-2 h-7 w-7 text-muted-foreground" />
+      <p className="font-medium text-sm leading-tight">No activity to display</p>
+      <p className="mt-1 text-[12px] text-muted-foreground leading-tight">
         Recent invoices and posted transactions will appear here.
       </p>
     </div>
@@ -678,21 +679,21 @@ const handleBackToLogin = async () => {
     recentActivity.map((item) => (
       <div
         key={item.id}
-        className="flex items-start justify-between gap-3 py-4 first:pt-0 last:pb-0"
+        className="flex items-start justify-between gap-2.5 py-2.5 first:pt-0 last:pb-0"
       >
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium">
+          <p className="truncate text-sm font-medium leading-tight">
             {item.title}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[12px] text-muted-foreground leading-tight">
             {item.subtitle}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-[12px] text-muted-foreground leading-tight">
             {item.date || "Date unavailable"}
           </p>
         </div>
 
-        <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-xs font-medium capitalize text-muted-foreground">
+        <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium capitalize text-muted-foreground">
           {item.status}
         </span>
       </div>
@@ -702,6 +703,7 @@ const handleBackToLogin = async () => {
 
             </article>
           </section>
+
 
 
         </div>
