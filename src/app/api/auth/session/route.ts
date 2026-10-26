@@ -3,7 +3,7 @@ import {
   adminAuth,
   AdminAuthConfigurationError,
 } from "@/lib/firebase-admin-auth";
-
+// import { isAdminUid } from "@/lib/admin-uid";
 
 const SESSION_DURATION = 5 * 24 * 60 * 60 * 1000;
 
