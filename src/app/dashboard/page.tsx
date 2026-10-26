@@ -12,6 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { usePermissions } from "@/lib/use-permissions";
+import { useRouter } from "next/navigation";
 
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
@@ -96,6 +97,7 @@ export default function DashboardPage() {
   isAdmin,
   loading: permissionsLoading,
 } = usePermissions();
+const router = useRouter();
 
 const canViewDashboard =
   isAdmin || can("dashboard.view");
@@ -389,19 +391,31 @@ if (permissionsLoading) {
   );
 }
 
+
 if (!canViewDashboard) {
   return (
-    <div className="p-8">
-      <h1 className="text-xl font-semibold">
-        Access Denied
-      </h1>
+    <div className="flex min-h-screen items-center justify-center bg-background p-6">
+      <div className="w-full max-w-md rounded-xl border border-border bg-card p-8 text-center shadow-sm">
+        <h1 className="text-xl font-semibold">
+          Access Denied
+        </h1>
 
-      <p className="mt-2 text-sm text-muted-foreground">
-        You do not have permission to view the Dashboard.
-      </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          You do not have permission to view the Dashboard.
+        </p>
+
+        <button
+          type="button"
+          onClick={() => router.push("/login")}
+          className="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+        >
+          Back to Login
+        </button>
+      </div>
     </div>
   );
 }
+
   return (
    <div className="min-h-screen bg-background text-foreground">
   <div className="hidden md:block">
