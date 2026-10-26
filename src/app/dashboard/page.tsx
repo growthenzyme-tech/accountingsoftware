@@ -12,7 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { usePermissions } from "@/lib/use-permissions";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
 
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
@@ -97,7 +97,8 @@ export default function DashboardPage() {
   isAdmin,
   loading: permissionsLoading,
 } = usePermissions();
-const router = useRouter();
+const { signOut, error: authError } = useAuth();
+const [signingOut, setSigningOut] = useState(false);
 
 const canViewDashboard =
   isAdmin || can("dashboard.view");
@@ -393,6 +394,18 @@ if (permissionsLoading) {
 
 
 if (!canViewDashboard) {
+  
+const handleBackToLogin = async () => {
+  setSigningOut(true);
+
+  try {
+    await signOut();
+  } finally {
+    setSigningOut(false);
+  }
+};
+
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-6">
       <div className="w-full max-w-md rounded-xl border border-border bg-card p-8 text-center shadow-sm">
@@ -404,12 +417,19 @@ if (!canViewDashboard) {
           You do not have permission to view the Dashboard.
         </p>
 
+        {authError && (
+          <p role="alert" className="mt-4 text-sm text-destructive">
+            {authError}
+          </p>
+        )}
+
         <button
           type="button"
-          onClick={() => router.push("/login")}
-          className="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          onClick={() => void handleBackToLogin()}
+          disabled={signingOut}
+          className="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-70"
         >
-          Back to Login
+          {signingOut ? "Signing out…" : "Back to Login"}
         </button>
       </div>
     </div>

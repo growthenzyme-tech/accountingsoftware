@@ -136,13 +136,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
 
+
 const signOut = async () => {
   setError(null);
   setSuccess(null);
 
   try {
-    await clearSessionCookie();
+    // First, sign out from Firebase Authentication.
     await firebaseSignOut(auth);
+
+    // Then clear the server-side session cookie.
+    await clearSessionCookie();
+
+    // Update the local authentication state.
+    setUser(null);
+
+    // Navigate directly to the login page.
     router.replace("/login");
     router.refresh();
   } catch (error) {
@@ -150,6 +159,7 @@ const signOut = async () => {
     setError("Failed to sign out. Please try again.");
   }
 };
+
 
 
   const resetPassword = async (email: string) => {
