@@ -445,130 +445,123 @@ const handleBackToLogin = async () => {
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="space-y-8 p-5 sm:p-8">
-          {/* Financial Overview */}
-          <section className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">
-                Financial Overview
-              </h1>
+        <div className="mx-auto w-full max-w-[1600px] space-y-7 p-4 sm:p-6 lg:p-8">
+          {/* Financial Overview and primary actions */}
+          <section className="rounded-xl border border-border bg-card/40 p-5 sm:p-6">
+            <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+              <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between xl:flex-1">
+                <div>
+                  <h1 className="text-2xl font-bold tracking-tight">
+                    Financial Overview
+                  </h1>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Monitor your business finances in one place.
+                  </p>
+                </div>
 
-              <p className="mt-1 text-sm text-muted-foreground">
-                Monitor your business finances in one place.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-end justify-start gap-3 sm:justify-end">
-              {/* Reporting Period */}
-              <div className="space-y-1">
-                <label
-                  htmlFor="reporting-period"
-                  className="text-sm text-muted-foreground"
-                >
-                  Reporting period
-                </label>
-
-                <div className="relative">
-                  <select
-                    id="reporting-period"
-                    value={reportingPeriod}
-                    onChange={(event) =>
-                      setReportingPeriod(
-                        event.target.value as ReportingPeriod
-                      )
-                    }
-                    className="h-10 w-full appearance-none rounded-lg border border-border bg-background py-2 pl-3 pr-9 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring"
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+                  <a
+                    href="/invoices"
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                   >
-                    <option value="this-month">This Month</option>
-                    <option value="last-month">Last Month</option>
-                    <option value="this-year">This Year</option>
-                    <option value="custom">Custom Range</option>
-                  </select>
-
-                  <ChevronDown
-                    aria-hidden="true"
-                    className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                  />
+                    Create Invoice
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="/contacts"
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                  >
+                    Add Contact
+                    <ArrowDownRight className="h-4 w-4" />
+                  </a>
                 </div>
               </div>
 
-              {/* Custom Date Range */}
-              {reportingPeriod === "custom" && (
-                <>
-                  <div className="space-y-1">
-                    <label
-                      htmlFor="start-date"
-                      className="text-sm text-muted-foreground"
-                    >
-                      Start date
-                    </label>
-
-                    <input
-                      id="start-date"
-                      type="date"
-                      value={startDate}
-                      max={endDate || undefined}
+              <div className="grid w-full grid-cols-1 gap-3 xl:w-auto xl:min-w-[220px]">
+                {/* Reporting Period */}
+                <div className="space-y-1">
+                  <label
+                    htmlFor="reporting-period"
+                    className="text-sm text-muted-foreground"
+                  >
+                    Reporting period
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="reporting-period"
+                      value={reportingPeriod}
                       onChange={(event) =>
-                        setStartDate(event.target.value)
+                        setReportingPeriod(event.target.value as ReportingPeriod)
                       }
-                      aria-invalid={invalidDateRange}
-                      className="h-10 rounded-lg border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      className="h-10 w-full min-w-[180px] appearance-none rounded-lg border border-border bg-background py-2 pl-3 pr-9 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-ring"
+                    >
+                      <option value="this-month">This Month</option>
+                      <option value="last-month">Last Month</option>
+                      <option value="this-year">This Year</option>
+                      <option value="custom">Custom Range</option>
+                    </select>
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
                     />
                   </div>
+                </div>
 
-                  <div className="space-y-1">
-                    <label
-                      htmlFor="end-date"
-                      className="text-sm text-muted-foreground"
-                    >
-                      End date
-                    </label>
-
-                    <input
-                      id="end-date"
-                      type="date"
-                      value={endDate}
-                      min={startDate || undefined}
-                      onChange={(event) =>
-                        setEndDate(event.target.value)
-                      }
-                      aria-invalid={invalidDateRange}
-                      className="h-10 rounded-lg border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-                    />
-
-                    {invalidDateRange && (
-                      <p
-                        className="text-sm text-destructive text-red-600"
-                        role="alert"
-                      >
-                        End date must be on or after the start date.
-                      </p>
-                    )}
+                {/* Custom Date Range */}
+                {reportingPeriod === "custom" && (
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                    <div className="space-y-1">
+                      <label htmlFor="start-date" className="text-sm text-muted-foreground">
+                        Start date
+                      </label>
+                      <input
+                        id="start-date"
+                        type="date"
+                        value={startDate}
+                        max={endDate || undefined}
+                        onChange={(event) => setStartDate(event.target.value)}
+                        aria-invalid={invalidDateRange}
+                        className="h-10 w-full min-w-0 rounded-lg border border-border bg-background px-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label htmlFor="end-date" className="text-sm text-muted-foreground">
+                        End date
+                      </label>
+                      <input
+                        id="end-date"
+                        type="date"
+                        value={endDate}
+                        min={startDate || undefined}
+                        onChange={(event) => setEndDate(event.target.value)}
+                        aria-invalid={invalidDateRange}
+                        className="h-10 w-full min-w-0 rounded-lg border border-border bg-background px-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring"
+                      />
+                      {invalidDateRange && (
+                        <p className="text-sm text-destructive" role="alert">
+                          End date must be on or after the start date.
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </>
-              )}
+                )}
 
-              {/* Selected Date Range */}
-           
-            <p
-              className="w-full text-right text-xs text-muted-foreground"
-              aria-live="polite"
-            >
-              {invalidDateRange
-                ? "End date must be on or after the start date."
-                : !dateRange
-                  ? reportingPeriod === "custom"
-                    ? "Select both dates to continue."
-                    : "Select a valid reporting period."
-                  : `Showing ${dateRange.startDate} to ${dateRange.endDate}`}
-            </p>
-
+                <p className="text-left text-xs text-muted-foreground xl:text-right" aria-live="polite">
+                  {invalidDateRange
+                    ? "End date must be on or after the start date."
+                    : !dateRange
+                      ? reportingPeriod === "custom"
+                        ? "Select both dates to continue."
+                        : "Select a valid reporting period."
+                      : `Showing ${dateRange.startDate} to ${dateRange.endDate}`}
+                </p>
+              </div>
             </div>
           </section>
 
           {/* Financial Statistics */}
           
-<section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
   {[
     {
       title: "Total Revenue",
@@ -604,7 +597,7 @@ const handleBackToLogin = async () => {
     return (
       <article
         key={stat.title}
-        className="rounded-xl border border-border bg-card p-5 shadow-sm"
+        className="flex min-h-[150px] flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
       >
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
@@ -613,7 +606,7 @@ const handleBackToLogin = async () => {
           <Icon className={`h-5 w-5 ${stat.color}`} />
         </div>
 
-        <p className="mt-4 text-2xl font-bold tracking-tight">
+        <p className="mt-4 break-words text-2xl font-semibold tracking-tight tabular-nums sm:text-[1.75rem]">
           {dataLoading ? (
             <Loader2 className="h-6 w-6 animate-spin" />
           ) : (
@@ -631,8 +624,8 @@ const handleBackToLogin = async () => {
 
 
           {/* Cash Flow and Recent Activity */}
-          <section className="grid gap-6 xl:grid-cols-3">
-            <article className="rounded-xl border border-border bg-card p-5 sm:p-6 xl:col-span-2">
+          <section className="grid min-w-0 grid-cols-1 items-stretch gap-5 2xl:grid-cols-3">
+            <article className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6 2xl:col-span-2">
               <div>
                 <h2 className="text-lg font-semibold">
                   Cash Flow
@@ -652,7 +645,7 @@ const handleBackToLogin = async () => {
               </div>
             </article>
 
-            <article className="rounded-xl border border-border bg-card p-5 sm:p-6">
+            <article className="min-w-0 rounded-xl border border-border bg-card p-5 sm:p-6">
               <h2 className="text-lg font-semibold">
                 Recent Activity
               </h2>
@@ -662,7 +655,7 @@ const handleBackToLogin = async () => {
               </p>
 
               
-<div className="mt-6 space-y-4">
+<div className="mt-5 divide-y divide-border">
   {dataError && (
     <p role="alert" className="text-sm text-red-600">
       {dataError}
@@ -685,7 +678,7 @@ const handleBackToLogin = async () => {
     recentActivity.map((item) => (
       <div
         key={item.id}
-        className="flex items-start justify-between gap-3 border-b border-border pb-3 last:border-0"
+        className="flex items-start justify-between gap-3 py-4 first:pt-0 last:pb-0"
       >
         <div className="min-w-0">
           <p className="truncate text-sm font-medium">
@@ -699,7 +692,7 @@ const handleBackToLogin = async () => {
           </p>
         </div>
 
-        <span className="shrink-0 rounded-full bg-muted px-2 py-1 text-xs capitalize">
+        <span className="shrink-0 rounded-full bg-muted px-2.5 py-1 text-xs font-medium capitalize text-muted-foreground">
           {item.status}
         </span>
       </div>
@@ -710,34 +703,7 @@ const handleBackToLogin = async () => {
             </article>
           </section>
 
-          {/* Quick Actions */}
-          <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
-            <h2 className="text-lg font-semibold">
-              Quick Actions
-            </h2>
 
-            <p className="mt-1 text-sm text-muted-foreground">
-              Common accounting tasks
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                href="/invoices"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
-              >
-                Create Invoice
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-
-              <a
-                href="/contacts"
-                className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium hover:bg-accent"
-              >
-                Add Contact
-                <ArrowDownRight className="h-4 w-4" />
-              </a>
-            </div>
-          </section>
         </div>
       </main>
     </div>

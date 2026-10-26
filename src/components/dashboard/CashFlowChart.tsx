@@ -2,14 +2,19 @@
 "use client";
 
 import {
-  Area,
-  AreaChart,
+  Bar,
+  BarChart,
   CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
+
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
 export type CashFlowPoint = {
   month: string;
@@ -28,98 +33,123 @@ const currency = (value: number) =>
     maximumFractionDigits: 0,
   }).format(value);
 
+const chartConfig = {
+  received: {
+    label: "Cash received",
+    color: "var(--chart-1)",
+  },
+  paid: {
+    label: "Cash paid",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig;
+
+const formatAxisValue = (value: number) => {
+  if (value >= 100000) {
+    return `₹${(value / 100000).toFixed(1)}L`;
+  }
+
+  if (value >= 1000) {
+    return `₹${(value / 1000).toFixed(0)}k`;
+  }
+
+  return `₹${value}`;
+};
+
 export default function CashFlowChart({
   data,
 }: CashFlowChartProps) {
   return (
-    <div className="h-72 w-full">
+    <div className="w-full min-w-0">
       {data.length === 0 ? (
-        <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+        <div className="flex min-h-[280px] items-center justify-center text-sm text-muted-foreground">
           No cash-flow transactions for this period.
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[280px] w-full sm:h-[320px]"
+        >
+          <BarChart
+            accessibilityLayer
             data={data}
-            margin={{ top: 10, right: 8, left: 8, bottom: 0 }}
+            margin={{
+              top: 12,
+              right: 12,
+              left: 4,
+              bottom: 4,
+            }}
+            barCategoryGap="35%"
           >
-            <defs>
-              <linearGradient
-                id="receivedFill"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop offset="0%" stopColor="#16e26e" stopOpacity={0.2} />
-                <stop offset="95%" stopColor="#16e26e" stopOpacity={0} />
-              </linearGradient>
-
-              <linearGradient
-                id="paidFill"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop offset="0%" stopColor="#e11313" stopOpacity={0.2} />
-                <stop offset="95%" stopColor="#e11313" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-
             <CartesianGrid
-              stroke="currentColor"
-              strokeOpacity={0.1}
               vertical={false}
+              stroke="var(--border)"
+              strokeDasharray="3 3"
             />
 
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: "currentColor", fontSize: 12 }}
-            />
-
-            <YAxis
-              tickFormatter={(value) => `₹${Number(value) / 1000}k`}
-              tickLine={false}
-              axisLine={false}
-              width={55}
-              tick={{ fill: "currentColor", fontSize: 12 }}
-            />
-
-            <Tooltip
-              formatter={(value, name) => [
-                currency(Number(value)),
-                name === "received" ? "Cash received" : "Cash paid",
-              ]}
-              contentStyle={{
-                backgroundColor: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "8px",
-                color: "var(--card-foreground)",
+              tickMargin={10}
+              minTickGap={20}
+              tick={{
+                fill: "var(--muted-foreground)",
+                fontSize: 12,
               }}
             />
 
-            <Area
-              type="monotone"
-              dataKey="received"
-              name="received"
-              stroke="#16e26e"
-              strokeWidth={2}
-              fill="url(#receivedFill)"
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              width={60}
+              tickMargin={8}
+              tick={{
+                fill: "var(--muted-foreground)",
+                fontSize: 11,
+              }}
+              tickFormatter={formatAxisValue}
             />
 
-            <Area
-              type="monotone"
-              dataKey="paid"
-              name="paid"
-              stroke="#e11313"
-              strokeWidth={2}
-              fill="url(#paidFill)"
+            <ChartTooltip
+              cursor={{
+                fill: "var(--muted)",
+                opacity: 0.25,
+              }}
+              content={
+                <ChartTooltipContent
+                  formatter={(value, name) => (
+                    <div className="flex min-w-[140px] items-center justify-between gap-4">
+                      <span className="text-muted-foreground">
+                        {name === "received"
+                          ? "Cash received"
+                          : "Cash paid"}
+                      </span>
+
+                      <span className="font-mono font-medium tabular-nums text-foreground">
+                        {currency(Number(value))}
+                      </span>
+                    </div>
+                  )}
+                />
+              }
             />
-          </AreaChart>
-        </ResponsiveContainer>
+
+            <Bar
+              dataKey="received"
+              fill="var(--color-received)"
+              radius={[4, 4, 0, 0]}
+              maxBarSize={32}
+            />
+
+            <Bar
+              dataKey="paid"
+              fill="var(--color-paid)"
+              radius={[4, 4, 0, 0]}
+              maxBarSize={32}
+            />
+          </BarChart>
+        </ChartContainer>
       )}
     </div>
   );
