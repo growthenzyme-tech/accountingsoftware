@@ -549,7 +549,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Reporting Period */}
-              <div className="grid w-full grid-cols-1 gap-2 xl:w-[220px] xl:shrink-0">
+              <div className="grid w-full grid-cols-1 gap-2 xl:w-[220px] xl:shrink-0 xl:mt-5">
                 <div className="space-y-1">
                   <label
                     htmlFor="reporting-period"
