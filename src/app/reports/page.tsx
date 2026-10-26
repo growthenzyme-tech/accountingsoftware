@@ -125,13 +125,13 @@ const response = await fetch(
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
-          <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mx-auto w-full max-w-[1600px] space-y-5 p-3 sm:p-5 lg:p-6">
+          <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              {/* <h1 className="text-base font-semibold tracking-tight sm:text-lg">
+              {/* <h1 className="text-xl font-semibold tracking-tight sm:text-[22px]">
                 Financial Reports
               </h1> */}
-              <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+             <p className="mt-6 text-sm font-medium text-foreground sm:text-base">
                 Review your business performance and profitability.
               </p>
             </div>
@@ -143,7 +143,7 @@ const response = await fetch(
   <div className="space-y-0.5">
     <label
       htmlFor="report-period"
-      className="text-[12px] text-muted-foreground leading-tight"
+      className="text-xs leading-tight text-muted-foreground"
     >
       Reporting period
     </label>
@@ -155,7 +155,7 @@ const response = await fetch(
         onChange={(event) =>
           setPeriod(event.target.value as ReportingPeriod)
         }
-        className="h-8 w-full min-w-[150px] appearance-none rounded-lg border border-border bg-background py-1 pl-2.5 pr-7 text-[12px] text-foreground outline-none transition-shadow focus:ring-2 focus:ring-ring"
+        className="h-9 w-full min-w-[150px] appearance-none rounded-md border border-border bg-background py-1.5 pl-3 pr-8 text-xs text-foreground outline-none transition-shadow focus:ring-2 focus:ring-ring"
       >
         <option value="this-month">This Month</option>
         <option value="last-month">Last Month</option>
@@ -187,7 +187,7 @@ const response = await fetch(
           max={endDate || undefined}
           onChange={(event) => setStartDate(event.target.value)}
           aria-invalid={invalidDateRange}
-          className="h-8 w-full min-w-0 rounded-lg border border-border bg-background px-2 text-[12px] outline-none transition-shadow focus:ring-2 focus:ring-ring"
+          className="h-9 w-full min-w-0 rounded-md border border-border bg-background px-2.5 text-xs outline-none transition-shadow focus:ring-2 focus:ring-ring"
         />
       </div>
 
@@ -206,7 +206,7 @@ const response = await fetch(
           min={startDate || undefined}
           onChange={(event) => setEndDate(event.target.value)}
           aria-invalid={invalidDateRange}
-          className="h-8 w-full min-w-0 rounded-lg border border-border bg-background px-2 text-[12px] outline-none transition-shadow focus:ring-2 focus:ring-ring"
+          className="h-9 w-full min-w-0 rounded-md border border-border bg-background px-2.5 text-xs outline-none transition-shadow focus:ring-2 focus:ring-ring"
         />
 
         {invalidDateRange && (
@@ -289,14 +289,14 @@ const response = await fetch(
 )}
 
           <section className="rounded-xl border border-border bg-card">
-            <div className="border-b border-border p-3 sm:p-4">
+            <div className="border-b border-border p-4 sm:p-5">
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4 text-muted-foreground" />
-               <h2 className="text-sm font-semibold">
+               <h2 className="text-base font-semibold">
                   Profit &amp; Loss Statement
                 </h2>
               </div>
-              <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+              <p className="mt-1 text-xs text-muted-foreground">
                Income and expenses for{" "}
 {dateRange
   ? `${dateRange.startDate} to ${dateRange.endDate}`

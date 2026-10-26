@@ -306,12 +306,12 @@ return (
         <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
           <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <BookOpen className="h-5 w-5 shrink-0 text-primary" />
-              <div>
+              {/* <BookOpen className="h-5 w-5 shrink-0 text-primary" /> */}
+              <div className="min-w-0">
                 {/* <h1 className="text-base font-semibold tracking-tight sm:text-lg">
                   General Ledger
                 </h1> */}
-                <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
+               <p className="text-sm font-medium text-foreground sm:text-base">
                   Create and review double-entry journal entries.
                 </p>
               </div>
@@ -330,13 +330,13 @@ return (
           </section>
 
           {error && (
-            <p
-              role="alert"
-              className="rounded-lg border border-destructive/40 p-3 text-sm text-destructive"
-            >
-              {error}
-            </p>
-          )}
+  <p
+    role="alert"
+    className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400"
+  >
+    {error}
+  </p>
+)}
 
           {message && (
             <p

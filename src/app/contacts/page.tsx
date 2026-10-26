@@ -257,13 +257,11 @@ async function handleDelete(contact: Contact) {
   <main className="min-w-0 flex-1 md:ml-64">
     <Header />
 
-    <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
+    <div className="mx-auto w-full max-w-[1600px] space-y-5 p-3 sm:p-5 lg:p-6">
           <div className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              {/* <h1 className="text-2xl font-semibold tracking-tight">
-                Contacts
-              </h1> */}
-              <p className="mt-1 text-sm text-muted-foreground">
+            <div className="min-w-0">
+             
+              <p className="text-sm font-medium text-foreground sm:text-base">
                 Manage your customers and vendors.
               </p>
             </div>
@@ -460,11 +458,11 @@ className="h-9 text-sm"
             </section>
           )}
 
-          <section className="overflow-hidden rounded-xl border bg-card shadow-sm">
+          <section className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
             <div className="flex flex-col gap-4 border-b p-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="font-semibold">Contact Directory</h2>
-                <p className="text-sm text-muted-foreground">
+                <h2 className="text-base font-semibold">Contact Directory</h2>
+                <p className="mt-1 text-xs text-muted-foreground">
                   {filteredContacts.length} contact
                   {filteredContacts.length !== 1 ? "s" : ""}
                 </p>
@@ -535,13 +533,13 @@ className="h-9 text-sm"
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[760px] text-left text-sm">
-                  <thead className="bg-muted/50 text-muted-foreground">
+                  <thead className="bg-muted/50 text-xs font-semibold text-muted-foreground">
                     <tr>
-                      <th className="px-4 py-3 font-medium">Contact</th>
-                      <th className="px-4 py-3 font-medium">Email</th>
-                      <th className="px-4 py-3 font-medium">Phone</th>
-                      <th className="px-4 py-3 font-medium">Type</th>
-                      <th className="px-4 py-3 text-right font-medium">Actions</th>
+                      <th className="px-4 py-3 font-semibold">Contact</th>
+                      <th className="px-4 py-3 font-semibold">Email</th>
+                      <th className="px-4 py-3 font-semibold">Phone</th>
+                      <th className="px-4 py-3 font-semibold">Type</th>
+                      <th className="px-4 py-3 text-right font-semibold">Actions</th>
                     </tr>
                   </thead>
 

@@ -344,18 +344,15 @@ if (!canView) {
         <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
           <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <Wallet className="h-5 w-5 text-primary" />
+              {/* <Wallet className="h-5 w-5 text-primary" /> */}
               <div>
-                {/* <h1 className="text-base font-semibold tracking-tight sm:text-lg">
-                  Chart of Accounts
-                </h1> */}
-                <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
-                  Manage your general ledger accounts.
-                </p>
-              </div>
+  <p className="text-sm font-medium text-foreground sm:text-base">
+    Manage your general ledger accounts.
+  </p>
+</div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 sm:mt-1">
               <Button
                 variant="outline"
                 onClick={exportAccounts}

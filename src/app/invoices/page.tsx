@@ -397,17 +397,14 @@ const detailProps = {
   <main className="min-w-0 flex-1 md:ml-64">
         <Header />
 
-        <div className="mx-auto w-full max-w-none space-y-4 p-3 sm:p-4 lg:p-5">
+        <div className="mx-auto w-full max-w-[1600px] space-y-5 p-3 sm:p-5 lg:p-6">
           {/* Title */}
           <div className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
-              {/* <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-                Invoices
-              </h1> */}
-              <p className="mt-1 text-sm text-muted-foreground">
-                Create and manage customer invoices.
-              </p>
-            </div>
+  <p className="text-sm font-medium text-foreground sm:text-base">
+    Create and manage customer invoices.
+  </p>
+</div>
 
            <Button
   size="sm"
@@ -440,7 +437,7 @@ const detailProps = {
           {/* Overview strip */}
           
 {/* Invoice Table */}
-<section className="overflow-hidden rounded-xl border bg-card shadow-sm">
+<section className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
 
   {/* Search and Filters */}
   <div className="flex flex-col gap-3 border-b p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
