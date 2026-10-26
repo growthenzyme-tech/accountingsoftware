@@ -346,9 +346,9 @@ if (!canView) {
             <div className="flex items-center gap-3">
               <Wallet className="h-5 w-5 text-primary" />
               <div>
-                <h1 className="text-base font-semibold tracking-tight sm:text-lg">
+                {/* <h1 className="text-base font-semibold tracking-tight sm:text-lg">
                   Chart of Accounts
-                </h1>
+                </h1> */}
                 <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                   Manage your general ledger accounts.
                 </p>

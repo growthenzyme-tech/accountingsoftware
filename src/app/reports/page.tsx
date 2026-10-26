@@ -128,9 +128,9 @@ const response = await fetch(
         <div className="mx-auto w-full max-w-[1500px] space-y-4 p-3 sm:p-4 lg:p-4">
           <section className="flex flex-col gap-3 border-b pb-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="text-base font-semibold tracking-tight sm:text-lg">
+              {/* <h1 className="text-base font-semibold tracking-tight sm:text-lg">
                 Financial Reports
-              </h1>
+              </h1> */}
               <p className="mt-0.5 text-xs text-muted-foreground sm:text-sm">
                 Review your business performance and profitability.
               </p>
@@ -265,22 +265,28 @@ const response = await fetch(
             />
           </section>
 
-          {error && (
-            <div
-              role="alert"
-              className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm"
-            >
-              <p className="font-medium">Unable to load the report</p>
-              <p className="mt-1 text-muted-foreground">{error}</p>
-              <button
-                onClick={() => setPeriod((current) => current)}
-                className="mt-3 inline-flex items-center gap-2 font-medium underline"
-              >
-                <RefreshCw className="h-4 w-4" />
-                Try again
-              </button>
-            </div>
-          )}
+{error && (
+  <div
+    role="alert"
+    className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400"
+  >
+    <p className="font-semibold text-red-700 dark:text-red-400">
+      Unable to load the report
+    </p>
+
+    <p className="mt-1 text-red-700 dark:text-red-400">
+      {error}
+    </p>
+
+    <button
+      onClick={() => setPeriod((current) => current)}
+      className="mt-3 inline-flex items-center gap-2 font-medium text-red-700 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+    >
+      <RefreshCw className="h-4 w-4" />
+      Try again
+    </button>
+  </div>
+)}
 
           <section className="rounded-xl border border-border bg-card">
             <div className="border-b border-border p-3 sm:p-4">
